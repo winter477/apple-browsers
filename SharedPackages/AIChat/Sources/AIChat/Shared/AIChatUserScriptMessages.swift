@@ -1,5 +1,5 @@
 //
-//  AIChatURL.swift
+//  AIChatUserScriptMessages.swift
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -16,16 +16,11 @@
 //  limitations under the License.
 //
 
-import AIChat
-
-/// A type-safe wrapper for AIChat URLs, allowing them to be used as parameters without directly handling raw URL strings.
-/// This struct ensures that the URL is always retrieved from a consistent and reliable source, defined by the `AIChatRemoteSettingsProvider`.
-struct AIChatURL {
-    private let settings: AIChatRemoteSettingsProvider
-
-    init(settings: AIChatRemoteSettingsProvider = AIChatRemoteSettings()) {
-        self.settings = settings
-    }
-
-    var wrappedValue: URL { settings.aiChatURL }
+public enum AIChatUserScriptMessages: String, CaseIterable {
+    case openAIChatSettings
+    case getAIChatNativeConfigValues
+    case closeAIChat
+    case getAIChatNativePrompt
+    case openAIChat
+    case getAIChatNativeHandoffData
 }

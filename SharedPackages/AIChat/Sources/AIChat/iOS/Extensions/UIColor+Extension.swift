@@ -1,5 +1,5 @@
 //
-//  AIChatURL.swift
+//  UIColor+Extension.swift
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -16,16 +16,12 @@
 //  limitations under the License.
 //
 
-import AIChat
+#if os(iOS)
+import UIKit
 
-/// A type-safe wrapper for AIChat URLs, allowing them to be used as parameters without directly handling raw URL strings.
-/// This struct ensures that the URL is always retrieved from a consistent and reliable source, defined by the `AIChatRemoteSettingsProvider`.
-struct AIChatURL {
-    private let settings: AIChatRemoteSettingsProvider
-
-    init(settings: AIChatRemoteSettingsProvider = AIChatRemoteSettings()) {
-        self.settings = settings
+extension UIColor {
+    static var webViewBackgroundColor: UIColor {
+        return UIColor(named: "webViewBackgroundColor", in: Bundle.module, compatibleWith: nil) ?? UIColor.clear
     }
-
-    var wrappedValue: URL { settings.aiChatURL }
 }
+#endif

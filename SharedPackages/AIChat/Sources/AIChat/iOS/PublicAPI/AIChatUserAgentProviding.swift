@@ -1,5 +1,5 @@
 //
-//  AIChatURL.swift
+//  AIChatUserAgentProviding.swift
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -16,16 +16,17 @@
 //  limitations under the License.
 //
 
-import AIChat
+#if os(iOS)
+import Foundation
 
-/// A type-safe wrapper for AIChat URLs, allowing them to be used as parameters without directly handling raw URL strings.
-/// This struct ensures that the URL is always retrieved from a consistent and reliable source, defined by the `AIChatRemoteSettingsProvider`.
-struct AIChatURL {
-    private let settings: AIChatRemoteSettingsProvider
+/// A protocol for generating a user agent string based on a given URL.
+public protocol AIChatUserAgentProviding {
 
-    init(settings: AIChatRemoteSettingsProvider = AIChatRemoteSettings()) {
-        self.settings = settings
-    }
-
-    var wrappedValue: URL { settings.aiChatURL }
+    /// Returns a user agent string for the specified URL.
+    ///
+    /// - Parameter url: An optional URL to customize the user agent. If `nil`, a default
+    ///                  user agent should be returned.
+    /// - Returns: A `String` representing the user agent for the given URL.
+    func userAgent(url: URL?) -> String
 }
+#endif
