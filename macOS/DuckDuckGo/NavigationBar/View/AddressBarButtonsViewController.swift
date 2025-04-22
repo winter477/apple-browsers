@@ -213,6 +213,7 @@ final class AddressBarButtonsViewController: NSViewController {
 
         bookmarkButton.sendAction(on: .leftMouseDown)
 
+        aiChatButton.setAccessibilityIdentifier("AddressBarButtonsViewController.aiChatButton")
         privacyEntryPointButton.toolTip = UserText.privacyDashboardTooltip
     }
 
