@@ -74,6 +74,7 @@ final class TabBarViewController: NSViewController, TabBarRemoteMessagePresentin
     private var pinnedTabsHostingView: PinnedTabsHostingView?
     private let pinnedTabsManagerProvider: PinnedTabsManagerProviding = Application.appDelegate.pinnedTabsManagerProvider
     private var pinnedTabsDiscoveryPopover: NSPopover?
+    private weak var crashPopoverViewController: PopoverMessageViewController?
 
     var tabPreviewsEnabled: Bool = true
 
@@ -1218,6 +1219,31 @@ extension TabBarViewController: TabBarViewItemDelegate {
         }
 
         tabCollectionViewModel.tabViewModel(at: indexPath.item)?.tab.killWebContentProcess()
+    }
+
+    func tabBarViewItemDidUpdateCrashInfoPopoverVisibility(_ tabBarViewItem: TabBarViewItem, sender: NSButton, shouldShow: Bool) {
+        guard shouldShow else {
+            crashPopoverViewController?.dismiss()
+            return
+        }
+
+        DispatchQueue.main.async {
+            let viewController = PopoverMessageViewController(
+                title: "This tab has crashed",
+                message: "The page was reloaded automatically. Tab history and form data has been lost.",
+                presentMultiline: true,
+                maxWidth: TabCrashIndicatorModel.Const.popoverWidth,
+                autoDismissDuration: nil,
+                onDismiss: {
+                    tabBarViewItem.hideCrashIndicatorButton()
+                },
+                onClick: {
+                    tabBarViewItem.hideCrashIndicatorButton()
+                }
+            )
+            self.crashPopoverViewController = viewController
+            viewController.show(onParent: self, relativeTo: sender, behavior: .semitransient)
+        }
     }
 
     func tabBarViewItem(_ tabBarViewItem: TabBarViewItem, isMouseOver: Bool) {
