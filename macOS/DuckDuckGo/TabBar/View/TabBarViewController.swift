@@ -762,7 +762,8 @@ final class TabBarViewController: NSViewController, TabBarRemoteMessagePresentin
             return
         }
 
-        let position = pinnedTabsContainerView.frame.minX + PinnedTabView.Const.dimension * CGFloat(index)
+        let pinnedTabWidth = visualStyleManager.style.tabStyleProvider.pinnedTabWidth
+        let position = pinnedTabsContainerView.frame.minX + pinnedTabWidth * CGFloat(index)
         showTabPreview(for: tabViewModel, from: position)
     }
 
@@ -1023,7 +1024,7 @@ extension TabBarViewController: NSCollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
         let isItemSelected = tabCollectionViewModel.selectionIndex == .unpinned(indexPath.item)
-        return NSSize(width: self.currentTabWidth(selected: isItemSelected), height: TabBarViewItem.Height.standard)
+        return NSSize(width: self.currentTabWidth(selected: isItemSelected), height: visualStyleManager.style.tabStyleProvider.standardTabHeight)
     }
 
 }
@@ -1314,9 +1315,10 @@ extension TabBarViewController: TabBarViewItemDelegate {
             self.pinnedTabsDiscoveryPopover = popover
 
             guard let view = self.pinnedTabsHostingView else { return }
-            popover.show(relativeTo: NSRect(x: view.bounds.maxX - PinnedTabView.Const.dimension,
+            let pinnedTabWidth = visualStyleManager.style.tabStyleProvider.pinnedTabWidth
+            popover.show(relativeTo: NSRect(x: view.bounds.maxX - pinnedTabWidth,
                                             y: view.bounds.minY,
-                                            width: PinnedTabView.Const.dimension,
+                                            width: pinnedTabWidth,
                                             height: view.bounds.height),
                          of: view,
                          preferredEdge: .maxY)
