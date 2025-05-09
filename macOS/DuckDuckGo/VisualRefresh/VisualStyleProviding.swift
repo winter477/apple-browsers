@@ -48,6 +48,7 @@ protocol VisualStyleProviding {
     var overflowButtonImage: NSImage { get }
     var toolbarButtonsCornerRadius: CGFloat { get }
     var navigationBackgroundColor: NSColor { get }
+    var fireWindowGraphic: NSImage { get }
 
     /// General colors
     var baseBackgroundColor: NSColor { get }
@@ -125,6 +126,7 @@ struct VisualStyle: VisualStyleProviding {
     let addressBarIconsProvider: AddressBarIconsProviding
     let tabStyleProvider: TabStyleProviding
     let navigationBackgroundColor: NSColor
+    let fireWindowGraphic: NSImage
     let baseBackgroundColor: NSColor
     let textPrimaryColor: NSColor
     let textSecondaryColor: NSColor
@@ -206,6 +208,7 @@ struct VisualStyle: VisualStyleProviding {
                            addressBarIconsProvider: LegacyAddressBarIconsProvider(),
                            tabStyleProvider: LegacyTabStyleProvider(),
                            navigationBackgroundColor: .navigationBarBackground,
+                           fireWindowGraphic: .burnerWindowGraphic,
                            baseBackgroundColor: .windowBackground,
                            textPrimaryColor: .labelColor,
                            textSecondaryColor: .secondaryLabelColor,
@@ -251,6 +254,7 @@ struct VisualStyle: VisualStyleProviding {
                            addressBarIconsProvider: NewAddressBarIconsProvider(),
                            tabStyleProvider: NewlineTabStyleProvider(),
                            navigationBackgroundColor: .navigationBackgroundColorNew,
+                           fireWindowGraphic: .burnerWindowGraphicNew,
                            baseBackgroundColor: .backgroundBaseColorNew,
                            textPrimaryColor: .primaryTextColorNew,
                            textSecondaryColor: .secondaryTextColorNew,
