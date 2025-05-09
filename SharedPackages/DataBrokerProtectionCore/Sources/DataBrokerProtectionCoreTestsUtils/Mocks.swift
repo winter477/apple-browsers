@@ -1251,7 +1251,7 @@ public final class MockDataBrokerProtectionOperationQueueManager: DataBrokerProt
     public var startScheduledAllOperationsIfPermittedCalledCompletion: (() -> Void)?
     public var startScheduledScanOperationsIfPermittedCalledCompletion: (() -> Void)?
 
-    public init(operationQueue: DataBrokerProtectionOperationQueue, operationsCreator: DataBrokerOperationsCreator, mismatchCalculator: MismatchCalculator, brokerUpdater: DataBrokerProtectionBrokerUpdater?, pixelHandler: Common.EventMapping<DataBrokerProtectionSharedPixels>) {
+    public init(operationQueue: DataBrokerProtectionOperationQueue, operationsCreator: DataBrokerOperationsCreator, mismatchCalculator: MismatchCalculator, brokerUpdater: BrokerJSONServiceProvider?, pixelHandler: Common.EventMapping<DataBrokerProtectionSharedPixels>) {
 
     }
 
@@ -1351,7 +1351,7 @@ public final class MockDataBrokerOperation: DataBrokerOperation, @unchecked Send
 
     public override func main() {
         if shouldError {
-            errorDelegate?.dataBrokerOperationDidError(DataBrokerProtectionError.noActionFound, withBrokerName: nil)
+            errorDelegate?.dataBrokerOperationDidError(DataBrokerProtectionError.noActionFound, withBrokerName: nil, version: nil)
         }
 
         finish()
@@ -1395,7 +1395,7 @@ public final class MockDataBrokerOperationErrorDelegate: DataBrokerOperationErro
 
     public init() {}
 
-    public func dataBrokerOperationDidError(_ error: any Error, withBrokerName brokerName: String?) {
+    public func dataBrokerOperationDidError(_ error: any Error, withBrokerName brokerName: String?, version: String?) {
         operationErrors.append(error)
     }
 }
@@ -1487,23 +1487,68 @@ public final class MockMismatchCalculator: MismatchCalculator {
     }
 }
 
-public final class MockDataBrokerProtectionBrokerUpdater: DataBrokerProtectionBrokerUpdater {
+public final class MockBrokerJSONService: BrokerJSONServiceProvider {
+    public var vault: any DataBrokerProtectionCore.DataBrokerProtectionSecureVault
 
     public private(set) var didCallUpdateBrokers = false
     public private(set) var didCallCheckForUpdates = false
 
-    public static func provideForDebug() -> DefaultDataBrokerProtectionBrokerUpdater? {
-        nil
+    public init() {
+        self.vault = try! DataBrokerProtectionSecureVaultMock(providers:
+                                                                SecureStorageProviders(
+                                                                    crypto: EmptySecureStorageCryptoProviderMock(),
+                                                                    database: SecureStorageDatabaseProviderMock(),
+                                                                    keystore: EmptySecureStorageKeyStoreProviderMock()))
     }
 
-    public init() { }
+    public func checkForUpdates(skipsLimiter: Bool) async throws {
+        didCallCheckForUpdates = true
+    }
+
+    public func checkForUpdates() async throws {
+        didCallCheckForUpdates = true
+    }
+
+    public func bundledBrokers() throws -> [DataBroker]? {
+        nil
+    }
 
     public func updateBrokers() {
         didCallUpdateBrokers = true
     }
+}
 
-    public func checkForUpdatesInBrokerJSONFiles() {
-        didCallCheckForUpdates = true
+public struct MockLocalBrokerJSONService: LocalBrokerJSONServiceProvider {
+    public init() {}
+
+    public func bundledBrokers() throws -> [DataBroker]? {
+        []
+    }
+
+    public func checkForUpdates() async throws {
+    }
+}
+
+public final class MockFileManager: FileManager {
+    public var hasUnzippedContent = false
+
+    let fileNames = ["valid-broker", "invalid-broker-with-unsupported-type", "invalid-broker-with-unsupported-action"]
+    lazy var fileURLs = fileNames.compactMap { Bundle.module.url(forResource: $0, withExtension: "json", subdirectory: "Resources") }
+
+    public override func fileExists(atPath path: String, isDirectory: UnsafeMutablePointer<ObjCBool>?) -> Bool {
+        hasUnzippedContent
+    }
+
+    public override func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions = []) throws -> [URL] {
+        hasUnzippedContent ? fileURLs : []
+    }
+
+    public override func removeItem(at URL: URL) throws {
+        hasUnzippedContent = false
+    }
+
+    public override func unzipArchive(at sourceURL: URL, to destinationURL: URL) throws {
+        hasUnzippedContent = true
     }
 }
 

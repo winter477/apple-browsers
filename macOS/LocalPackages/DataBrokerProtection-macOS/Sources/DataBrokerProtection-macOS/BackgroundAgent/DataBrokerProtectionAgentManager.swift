@@ -28,13 +28,20 @@ import Freemium
 import Subscription
 import UserNotifications
 import DataBrokerProtectionCore
+import FeatureFlags
 
 // This is to avoid exposing all the dependancies outside of the DBP package
 public class DataBrokerProtectionAgentManagerProvider {
 
+    static let featureFlagOverridesPublishingHandler = FeatureFlagOverridesPublishingHandler<FeatureFlag>()
+
     private let databaseURL = DefaultDataBrokerProtectionDatabaseProvider.databaseFilePath(directoryName: DatabaseConstants.directoryName, fileName: DatabaseConstants.fileName, appGroupIdentifier: Bundle.main.appGroupName)
 
-    public static func agentManager(authenticationManager: DataBrokerProtectionAuthenticationManaging, vpnBypassService: VPNBypassFeatureProvider) -> DataBrokerProtectionAgentManager? {
+    public static func agentManager(authenticationManager: DataBrokerProtectionAuthenticationManaging,
+                                    configurationManager: DefaultConfigurationManager,
+                                    privacyConfigurationManager: DBPPrivacyConfigurationManager,
+                                    remoteBrokerDeliveryFeatureFlagger: RemoteBrokerDeliveryFeatureFlagging,
+                                    vpnBypassService: VPNBypassFeatureProvider) -> DataBrokerProtectionAgentManager? {
         guard let pixelKit = PixelKit.shared else {
             assertionFailure("PixelKit not set up")
             return nil
@@ -49,13 +56,6 @@ public class DataBrokerProtectionAgentManagerProvider {
         let notificationService = DefaultDataBrokerProtectionUserNotificationService(pixelHandler: pixelHandler, userNotificationCenter: UNUserNotificationCenter.current(), authenticationManager: authenticationManager)
         let eventsHandler = DefaultOperationEventsHandler(userNotificationService: notificationService)
 
-        Configuration.setURLProvider(DBPAgentConfigurationURLProvider())
-        let configStore = ConfigurationStore()
-        let privacyConfigurationManager = DBPPrivacyConfigurationManager()
-        let configurationManager = ConfigurationManager(privacyConfigManager: privacyConfigurationManager, store: configStore)
-        configurationManager.start()
-        // Load cached config (if any)
-        privacyConfigurationManager.reload(etag: configStore.loadEtag(for: .privacyConfiguration), data: configStore.loadData(for: .privacyConfiguration))
         let ipcServer = DefaultDataBrokerProtectionIPCServer(machServiceName: Bundle.main.bundleIdentifier!)
 
         let features = ContentScopeFeatureToggles(emailProtection: false,
@@ -89,7 +89,15 @@ public class DataBrokerProtectionAgentManagerProvider {
             return nil
         }
 
-        let database = DataBrokerProtectionDatabase(fakeBrokerFlag: fakeBroker, pixelHandler: sharedPixelsHandler, vault: vault)
+        let localBrokerService = LocalBrokerJSONService(vault: vault, pixelHandler: sharedPixelsHandler)
+        let brokerUpdater = RemoteBrokerJSONService(featureFlagger: remoteBrokerDeliveryFeatureFlagger,
+                                                    settings: dbpSettings,
+                                                    vault: vault,
+                                                    authenticationManager: authenticationManager,
+                                                    pixelHandler: sharedPixelsHandler,
+                                                    localBrokerProvider: localBrokerService)
+
+        let database = DataBrokerProtectionDatabase(fakeBrokerFlag: fakeBroker, pixelHandler: sharedPixelsHandler, vault: vault, localBrokerService: brokerUpdater)
         let dataManager = DataBrokerProtectionDataManager(database: database)
 
         let operationQueue = OperationQueue()
@@ -97,7 +105,6 @@ public class DataBrokerProtectionAgentManagerProvider {
         let mismatchCalculator = DefaultMismatchCalculator(database: dataManager.database,
                                                            pixelHandler: sharedPixelsHandler)
 
-        let brokerUpdater = DefaultDataBrokerProtectionBrokerUpdater(vault: vault, pixelHandler: sharedPixelsHandler)
         let queueManager =  DefaultDataBrokerProtectionQueueManager(operationQueue: operationQueue,
                                                                     operationsCreator: operationsBuilder,
                                                                     mismatchCalculator: mismatchCalculator,
