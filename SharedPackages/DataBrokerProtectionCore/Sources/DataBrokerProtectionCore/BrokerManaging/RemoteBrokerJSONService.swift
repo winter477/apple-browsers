@@ -50,11 +50,11 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
         case allBrokers
 
         static func request(for endpoint: Endpoint,
-                            baseURL: URL,
+                            endpointURL: URL,
                             contentType: String? = nil,
                             eTag: String? = nil,
                             accessToken: String) throws -> URLRequest {
-            var request = URLRequest(url: try url(for: endpoint, baseURL: baseURL))
+            var request = URLRequest(url: try url(for: endpoint, endpointURL: endpointURL))
             request.httpMethod = "GET"
             if let contentType {
                 request.setValue(contentType, forHTTPHeaderField: "Content-Type")
@@ -68,14 +68,14 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
             return request
         }
 
-        private static func url(for endpoint: Endpoint, baseURL: URL) throws -> URL {
-            var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+        private static func url(for endpoint: Endpoint, endpointURL: URL) throws -> URL {
+            var components = URLComponents(url: endpointURL, resolvingAgainstBaseURL: true)
 
             switch endpoint {
             case .mainConfig:
-                components?.path = "/dbp/remote/v0/main_config.json"
+                components?.path += "/dbp/remote/v0/main_config.json"
             case .allBrokers:
-                components?.path = "/dbp/remote/v0"
+                components?.path += "/dbp/remote/v0"
                 components?.queryItems = [
                     .init(name: "name", value: "all.zip"),
                     .init(name: "type", value: "spec")
@@ -154,7 +154,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
             let lastBrokerJSONUpdateCheck = Date(timeIntervalSince1970: settings.lastBrokerJSONUpdateCheckTimestamp)
             if !skipsLimiter,
                Date().timeIntervalSince(lastBrokerJSONUpdateCheck) < Self.updateCheckInterval {
-                Logger.dataBrokerProtection.log("Skipping broker JSON update check due to rate limiting")
+                Logger.dataBrokerProtection.log("🧩 Skipping broker JSON update check due to rate limiting")
                 return
             }
 
@@ -165,7 +165,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
             guard let accessToken = await authenticationManager.accessToken() else { throw Error.missingAccessToken }
 
             let request = try Endpoint.request(for: .mainConfig,
-                                               baseURL: settings.selectedEnvironment.endpointURL,
+                                               endpointURL: settings.endpointURL,
                                                contentType: "application/json",
                                                eTag: settings.mainConfigETag,
                                                accessToken: accessToken)
@@ -173,7 +173,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
             guard let response = response as? HTTPURLResponse else { return }
 
             if response.statusCode == 304 {
-                Logger.dataBrokerProtection.log("Broker JSONs are up to date: main config eTag matches")
+                Logger.dataBrokerProtection.log("🧩 Broker JSONs are up to date: main config eTag matches")
                 settings.updateLastSuccessfulBrokerJSONUpdateCheckTimestamp()
                 return
             }
@@ -201,11 +201,11 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
         let diff = Set(incomingBrokerJSONs).subtracting(Set(savedBrokerJSONs))
 
         guard !diff.isEmpty else {
-            Logger.dataBrokerProtection.log("No changes detected in brokers, skipping update")
+            Logger.dataBrokerProtection.log("🧩 No changes detected in brokers, skipping update")
             return
         }
 
-        Logger.dataBrokerProtection.log("Changes detected in \(diff.count, privacy: .public) brokers")
+        Logger.dataBrokerProtection.log("🧩 Changes detected in \(diff.count, privacy: .public) brokers")
 
         try await downloadAndExtractBrokerJSONsIfNeeded(eTag: eTag)
         try processBrokerJSONs(eTag: eTag,
@@ -225,7 +225,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
         /// 1. Return early if all.zip is already extracted
         var isDirectory: ObjCBool = false
         guard !fileManager.fileExists(atPath: directoryURL.path, isDirectory: &isDirectory) else {
-            Logger.dataBrokerProtection.log("Broker JSONs already downloaded and extracted, skipping download")
+            Logger.dataBrokerProtection.log("🧩 Broker JSONs already downloaded and extracted, skipping download")
             return
         }
 
@@ -235,7 +235,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
                 guard let accessToken = await authenticationManager.accessToken() else { throw Error.missingAccessToken }
 
                 let request = try Endpoint.request(for: .allBrokers,
-                                                   baseURL: settings.selectedEnvironment.endpointURL,
+                                                   endpointURL: settings.endpointURL,
                                                    accessToken: accessToken)
 
                 let _: URL = try await withCheckedThrowingContinuation { [weak fileManager] continuation in
@@ -257,6 +257,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
 
                         do {
                             try fileManager?.moveItem(at: url, to: brokerArchiveURL)
+                            Logger.dataBrokerProtection.log("🧩 Remote broker JSON downloaded: \(url, privacy: .public)")
                             continuation.resume(returning: url)
                         } catch {
                             continuation.resume(throwing: error)
@@ -265,18 +266,18 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
                     task.resume()
                 }
             }
-            Logger.dataBrokerProtection.log("Broker JSONs downloaded")
+            Logger.dataBrokerProtection.log("🧩 Broker JSONs downloaded")
         } catch {
-            Logger.dataBrokerProtection.log("Failed to download broker JSONs: \(error)")
+            Logger.dataBrokerProtection.log("🧩 Failed to download broker JSONs: \(error)")
             throw error
         }
 
         /// 3. Extract all.zip
         do {
             try fileManager.unzipArchive(at: brokerArchiveURL, to: directoryURL)
-            Logger.dataBrokerProtection.log("Broker JSONs extracted to temporary directory")
+            Logger.dataBrokerProtection.log("🧩 Broker JSONs extracted to temporary directory")
         } catch {
-            Logger.dataBrokerProtection.log("Failed to extract broker JSONs: \(error)")
+            Logger.dataBrokerProtection.log("🧩 Failed to extract broker JSONs: \(error)")
             throw error
         }
     }
@@ -302,10 +303,10 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
                     try upsertBroker(dataBroker)
                 }
             } catch let error as DecodingError {
-                Logger.dataBrokerProtection.log("Failed to decode JSON file \(fileURL.lastPathComponent): \(error), skipping update")
+                Logger.dataBrokerProtection.log("🧩 Failed to decode JSON file \(fileURL.lastPathComponent): \(error), skipping update")
                 pixelHandler?.fire(.miscError(error: error, functionOccurredIn: "RemoteBrokerJSONService processBrokerJSONs"))
             } catch let error as Step.DecodingError {
-                Logger.dataBrokerProtection.log("JSON file \(fileURL.lastPathComponent) contains unsupported data: \(error), skipping update")
+                Logger.dataBrokerProtection.log("🧩 JSON file \(fileURL.lastPathComponent) contains unsupported data: \(error), skipping update")
                 pixelHandler?.fire(.miscError(error: error, functionOccurredIn: "RemoteBrokerJSONService processBrokerJSONs"))
             } catch {
                 throw error
@@ -319,7 +320,7 @@ public final class RemoteBrokerJSONService: BrokerJSONServiceProvider {
 
         try fileManager.removeItem(at: brokerArchiveURL)
         try fileManager.removeItem(at: directoryURL)
-        Logger.dataBrokerProtection.log("Temporary files removed")
+        Logger.dataBrokerProtection.log("🧩 Temporary files removed")
     }
 }
 

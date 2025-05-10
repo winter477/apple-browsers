@@ -47,6 +47,7 @@ final class DataBrokerProtectionDebugMenu: NSMenu {
     private var databaseBrowserWindowController: NSWindowController?
     private var dataBrokerForceOptOutWindowController: NSWindowController?
     private let customURLLabelMenuItem = NSMenuItem(title: "")
+    private let customServiceRootLabelMenuItem = NSMenuItem(title: "")
 
     private let environmentMenu = NSMenu()
     private let statusMenuIconMenu = NSMenuItem(title: "Show Status Menu Icon", action: #selector(DataBrokerProtectionDebugMenu.toggleShowStatusMenuItem))
@@ -138,6 +139,15 @@ final class DataBrokerProtectionDebugMenu: NSMenu {
                 customURLLabelMenuItem
             }
 
+            NSMenuItem(title: "DBP API") {
+                NSMenuItem(title: "Set Service Root", action: #selector(DataBrokerProtectionDebugMenu.setCustomServiceRoot))
+                    .targetting(self)
+
+                customServiceRootLabelMenuItem
+
+                NSMenuItem(title: "⚠️ Please reopen PIR and trigger a new scan for the changes to show up", action: nil, target: nil)
+            }
+
             NSMenuItem.separator()
 
             NSMenuItem(title: "Toggle VPN Bypass", action: #selector(DataBrokerProtectionDebugMenu.toggleVPNBypass))
@@ -172,6 +182,7 @@ final class DataBrokerProtectionDebugMenu: NSMenu {
 
     override func update() {
         updateWebUIMenuItemsState()
+        updateServiceRootMenuItemState()
         updateEnvironmentMenu()
         updateShowStatusMenuIconMenu()
     }
@@ -201,6 +212,34 @@ final class DataBrokerProtectionDebugMenu: NSMenu {
             return true
         }
     }
+
+    // swiftlint:disable force_try
+    @objc private func setCustomServiceRoot() {
+        showCustomServiceRootAlert { [weak self] value, removeBrokers in
+            guard let value, let self else { return false }
+
+            self.settings.serviceRoot = value
+
+            if removeBrokers {
+                let pixelHandler = DataBrokerProtectionSharedPixelsHandler(pixelKit: PixelKit.shared!, platform: .macOS)
+                let reporter = DataBrokerProtectionSecureVaultErrorReporter(pixelHandler: pixelHandler)
+                let databaseURL = DefaultDataBrokerProtectionDatabaseProvider.databaseFilePath(directoryName: DatabaseConstants.directoryName, fileName: DatabaseConstants.fileName, appGroupIdentifier: Bundle.main.appGroupName)
+                let vaultFactory = createDataBrokerProtectionSecureVaultFactory(appGroupName: Bundle.main.appGroupName, databaseFileURL: databaseURL)
+                let vault = try! vaultFactory.makeVault(reporter: reporter)
+                let database = DataBrokerProtectionDatabase(fakeBrokerFlag: DataBrokerDebugFlagFakeBroker(),
+                                                            pixelHandler: pixelHandler,
+                                                            vault: vault,
+                                                            localBrokerService: self.brokerUpdater)
+                let dataManager = DataBrokerProtectionDataManager(database: database)
+                try! dataManager.removeAllData()
+            }
+
+            self.forceBrokerJSONFilesUpdate()
+
+            return true
+        }
+    }
+    // swiftlint:enable force_try
 
     @objc private func startScheduledOperations(_ sender: NSMenuItem) {
         Logger.dataBrokerProtection.log("Running queued operations...")
@@ -345,11 +384,49 @@ final class DataBrokerProtectionDebugMenu: NSMenu {
         }
     }
 
+    func showCustomServiceRootAlert(callback: @escaping (String?, Bool) -> Bool) {
+        let alert = NSAlert()
+        alert.messageText = "Enter custom service root (staging environment only)"
+        alert.informativeText = "Leave blank for default"
+        alert.addButton(withTitle: "Accept")
+        alert.addButton(withTitle: "Cancel")
+        alert.showsSuppressionButton = true
+        alert.suppressionButton?.title = "Remove existing brokers"
+
+        let inputTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        inputTextField.placeholderString = "branches/some-branch"
+        alert.accessoryView = inputTextField
+
+        let shouldRemoveBrokers = alert.suppressionButton?.state == .on
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            if !callback(inputTextField.stringValue, shouldRemoveBrokers) {
+                let invalidAlert = NSAlert()
+                invalidAlert.messageText = "Invalid service root"
+                invalidAlert.informativeText = "Please enter a valid service root."
+                invalidAlert.addButton(withTitle: "OK")
+                invalidAlert.runModal()
+            }
+        } else {
+            _ = callback(nil, shouldRemoveBrokers)
+        }
+    }
+
     private func updateWebUIMenuItemsState() {
         productionURLMenuItem.state = webUISettings.selectedURLType == .custom ? .off : .on
         customURLMenuItem.state = webUISettings.selectedURLType == .custom ? .on : .off
 
         customURLLabelMenuItem.title = "Custom URL: [\(webUISettings.customURL ?? "")]"
+    }
+
+    private func updateServiceRootMenuItemState() {
+        switch settings.selectedEnvironment {
+        case .production:
+            customServiceRootLabelMenuItem.title = "Production environment currently in used. Please change it to Staging to use a custom service root"
+        case .staging:
+            customServiceRootLabelMenuItem.title = "Endpoint URL: [\(settings.endpointURL)]"
+        }
     }
 
     func menuItem(withTitle title: String, action: Selector, representedObject: Any?) -> NSMenuItem {
