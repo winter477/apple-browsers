@@ -112,7 +112,7 @@ struct DuckPlayerView: View {
                     )
                 }
                 .layoutPriority(1)
-                
+
                 Spacer(minLength: LayoutConstants.controlsSpacing)
 
                 // Controls Container
@@ -134,13 +134,13 @@ struct DuckPlayerView: View {
                 // Show the welcome message if needed
                 welcomeMessage
 
-                if !viewModel.shouldShowWelcomeMessage {
+                if !viewModel.shouldShowWelcomeMessage && !viewModel.isLandscape {
                     // Toggle Controls Button
                     ZStack {
                         Circle()
                             .fill(Color.gray.opacity(0.5))
                             .frame(width: LayoutConstants.controlButtonSize, height: LayoutConstants.controlButtonSize)
-                        
+
                         Button(action: {
                             withAnimation(.spring(response: LayoutConstants.animationResponseTime, dampingFraction: LayoutConstants.animationDampingFraction)) {
                                 controlsVisibility.toggle()
@@ -321,7 +321,7 @@ struct DuckPlayerView: View {
 
     @ViewBuilder
     private var welcomeMessage: some View {
-        if viewModel.shouldShowWelcomeMessage {
+        if viewModel.shouldShowWelcomeMessage && !viewModel.isLandscape {
             ZStack(alignment: .topTrailing) {
                 VStack(alignment: .leading) {
                     HStack {
