@@ -3315,7 +3315,12 @@ extension MainViewController: AutofillLoginListViewControllerDelegate {
 // MARK: - AIChatViewControllerManagerDelegate
 extension MainViewController: AIChatViewControllerManagerDelegate {
     func aiChatViewControllerManager(_ manager: AIChatViewControllerManager, didRequestToLoad url: URL) {
-        loadUrlInNewTab(url, inheritedAttribution: nil)
+        if let tabSwitcher = tabSwitcherController {
+            loadUrlInNewTab(url, inheritedAttribution: nil)
+            tabSwitcher.dismiss(animated: true)
+        } else {
+            loadUrlInNewTab(url, inheritedAttribution: nil)
+        }
     }
 
     func aiChatViewControllerManager(_ manager: AIChatViewControllerManager, didSubmitQuery query: String) {
