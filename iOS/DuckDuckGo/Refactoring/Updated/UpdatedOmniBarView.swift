@@ -259,7 +259,9 @@ final class UpdatedOmniBarView: UIView, OmniBarView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        // To be replaced with AppUserDefaults.Notifications.addressBarPositionChanged after release
+        // https://app.asana.com/1/137249556945/project/1207252092703676/task/1210323588862346?focus=true
+        NotificationCenter.default.post(name: DefaultOmniBarView.didLayoutNotification, object: self.frame.height)
         updateMaskLayer()
     }
 

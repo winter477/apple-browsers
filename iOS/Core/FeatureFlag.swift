@@ -42,6 +42,7 @@ public enum FeatureFlag: String {
         
     // Duckplayer 'Web based' UI
     case duckPlayer
+
     // Open Duckplayer in a new tab for 'Web based' UI
     case duckPlayerOpenInNewTab
     
@@ -141,18 +142,19 @@ extension FeatureFlag: FeatureFlagDescribing {
     public var supportsLocalOverriding: Bool {
         switch self {
         case .textZoom,
-                .experimentalBrowserTheming,
-                .networkProtectionRiskyDomainsProtection,
-                .privacyProAuthV2,
-                .scamSiteProtection,
-                .maliciousSiteProtection,
-                .autofillCreditCards,
-                .autofillCreditCardsOnByDefault,
-                .exchangeKeysToSyncWithAnotherDevice,
-                .privacyProOnboardingPromotion,
-                .syncSetupBarcodeIsUrlBased,
-                .canScanUrlBasedSyncSetupBarcodes,
-                .privacyProFreeTrial:
+             .experimentalBrowserTheming,
+             .networkProtectionRiskyDomainsProtection,
+             .privacyProAuthV2,
+             .scamSiteProtection,
+             .maliciousSiteProtection,
+             .autofillCreditCards,
+             .autofillCreditCardsOnByDefault,
+             .exchangeKeysToSyncWithAnotherDevice,
+             .privacyProOnboardingPromotion,
+             .syncSetupBarcodeIsUrlBased,
+             .canScanUrlBasedSyncSetupBarcodes,
+             .duckPlayerNativeUI,
+             .privacyProFreeTrial:
             return true
         case .onboardingSetAsDefaultBrowser:
             if #available(iOS 18.3, *) {
