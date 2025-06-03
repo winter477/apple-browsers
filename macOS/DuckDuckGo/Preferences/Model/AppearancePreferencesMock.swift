@@ -1,5 +1,5 @@
 //
-//  HistoryViewActionsManagerExtension.swift
+//  AppearancePreferencesMock.swift
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -16,19 +16,11 @@
 //  limitations under the License.
 //
 
-import History
-import HistoryView
+#if DEBUG
+import PersistenceTestingUtils
 
-extension HistoryViewActionsManager {
-
-    convenience init(historyCoordinator: HistoryDataSource, bookmarksHandler: HistoryViewBookmarksHandling) {
-        let dataProvider = HistoryViewDataProvider(historyDataSource: historyCoordinator)
-        self.init(scriptClients: [
-            DataClient(
-                dataProvider: dataProvider,
-                actionsHandler: HistoryViewActionsHandler(dataProvider: dataProvider, bookmarksHandler: bookmarksHandler),
-                errorHandler: HistoryViewErrorHandler()
-            )
-        ])
-    }
+extension AppearancePreferences {
+    // swiftlint:disable:next force_try
+    static let mock = AppearancePreferences(persistor: AppearancePreferencesUserDefaultsPersistor(keyValueStore: try! MockKeyValueFileStore()))
 }
+#endif
