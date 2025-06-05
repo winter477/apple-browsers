@@ -283,7 +283,9 @@ public enum MaliciousSiteProtectionSubfeature: String, PrivacySubfeature {
 
 public enum SetAsDefaultAndAddToDockSubfeature: String, PrivacySubfeature {
     public var parent: PrivacyFeature { .setAsDefaultAndAddToDock }
-    case popoverVsBannerExperiment
+
+    // https://app.asana.com/1/137249556945/project/1206329551987282/task/1210225579353384?focus=true
+    case scheduledDefaultBrowserAndDockPrompts
 }
 
 public enum OnboardingSubfeature: String, PrivacySubfeature {
