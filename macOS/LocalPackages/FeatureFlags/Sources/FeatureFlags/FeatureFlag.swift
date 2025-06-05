@@ -88,6 +88,9 @@ public enum FeatureFlag: String, CaseIterable {
 
     /// https://app.asana.com/1/137249556945/project/414235014887631/task/1210325960030113?focus=true
     case exchangeKeysToSyncWithAnotherDevice
+
+    /// https://app.asana.com/1/137249556945/project/1209671977594486/task/1210410403692636?focus=true
+    case aiChatSidebar
 }
 
 extension FeatureFlag: FeatureFlagDescribing {
@@ -138,7 +141,8 @@ extension FeatureFlag: FeatureFlagDescribing {
                 .maliciousSiteProtection,
                 .delayedWebviewPresentation,
                 .syncSetupBarcodeIsUrlBased,
-                .exchangeKeysToSyncWithAnotherDevice:
+                .exchangeKeysToSyncWithAnotherDevice,
+                .aiChatSidebar:
             return true
         case .debugMenu,
                 .sslCertificatesBypass,
@@ -214,6 +218,8 @@ extension FeatureFlag: FeatureFlagDescribing {
             return .remoteReleasable(.subfeature(SyncSubfeature.syncSetupBarcodeIsUrlBased))
         case .exchangeKeysToSyncWithAnotherDevice:
             return .remoteReleasable(.subfeature(SyncSubfeature.exchangeKeysToSyncWithAnotherDevice))
+        case .aiChatSidebar:
+            return .internalOnly()
         }
     }
 }
