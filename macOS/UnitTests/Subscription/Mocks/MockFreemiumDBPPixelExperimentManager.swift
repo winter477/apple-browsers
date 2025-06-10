@@ -1,5 +1,5 @@
 //
-//  SubscriptionFeatureAvailabilityMock.swift
+//  MockFreemiumDBPPixelExperimentManager.swift
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -16,15 +16,14 @@
 //  limitations under the License.
 //
 
-import Foundation
-import Subscription
-import BrowserServicesKit
+@testable import DuckDuckGo_Privacy_Browser
 
-public final class SubscriptionFeatureAvailabilityMock: SubscriptionFeatureAvailability {
-    public var isPaidAIChatEnabled: Bool = true
-    public var isSubscriptionPurchaseAllowed: Bool
+class MockFreemiumDBPPixelExperimentManager: FreemiumDBPPixelExperimentManaging {
+    var isTreatment: Bool = true
 
-    public init(isSubscriptionPurchaseAllowed: Bool, usesUnifiedFeedbackForm: Bool) {
-        self.isSubscriptionPurchaseAllowed = isSubscriptionPurchaseAllowed
+    var pixelParameters: [String: String]?
+
+    func assignUserToCohort() {
     }
+
 }
