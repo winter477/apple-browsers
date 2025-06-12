@@ -36,9 +36,11 @@ protocol VisualStyleProviding {
     var tabStyleProvider: TabStyleProviding { get }
     var colorsProvider: ColorsProviding { get }
     var iconsProvider: IconsProviding { get }
+
+    var isNewStyle: Bool { get }
 }
 
-protocol VisualStyleManagerProviding {
+protocol VisualStyleDecider {
     var style: any VisualStyleProviding { get }
 }
 
@@ -75,6 +77,7 @@ struct VisualStyle: VisualStyleProviding {
     let navigationToolbarButtonsSpacing: CGFloat
     let tabBarButtonSize: CGFloat
     let addToolbarShadow: Bool
+    let isNewStyle: Bool
 
     static var legacy: VisualStyleProviding {
         return VisualStyle(toolbarButtonsCornerRadius: 4,
@@ -87,7 +90,8 @@ struct VisualStyle: VisualStyleProviding {
                            fireButtonSize: 28,
                            navigationToolbarButtonsSpacing: 0,
                            tabBarButtonSize: 28,
-                           addToolbarShadow: false)
+                           addToolbarShadow: false,
+                           isNewStyle: false)
     }
 
     static var current: VisualStyleProviding {
@@ -102,11 +106,12 @@ struct VisualStyle: VisualStyleProviding {
                            fireButtonSize: 32,
                            navigationToolbarButtonsSpacing: 2,
                            tabBarButtonSize: 28,
-                           addToolbarShadow: true)
+                           addToolbarShadow: true,
+                           isNewStyle: true)
     }
 }
 
-final class VisualStyleManager: VisualStyleManagerProviding {
+final class DefaultVisualStyleDecider: VisualStyleDecider {
     private let featureFlagger: FeatureFlagger
     private let internalUserDecider: InternalUserDecider
 

@@ -47,6 +47,12 @@ extension ActiveRemoteMessageModel: NewTabPageActiveRemoteMessageProviding {
             }
         case .appStore:
             await openURLHandler(.appStore)
+        case .navigation(let value):
+            switch value {
+            case .feedback:
+                await navigateToFeedbackHandler()
+            default: break
+            }
         default:
             break
         }

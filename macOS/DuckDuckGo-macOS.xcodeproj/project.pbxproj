@@ -1047,6 +1047,10 @@
 		371D00E129D8509400EC8598 /* OpenSSL in Frameworks */ = {isa = PBXBuildFile; productRef = 371D00E029D8509400EC8598 /* OpenSSL */; };
 		371E1D672D0B2E9F00F9205B /* NewTabPageCustomizationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E1D662D0B2E9F00F9205B /* NewTabPageCustomizationProvider.swift */; };
 		371E1D682D0B2E9F00F9205B /* NewTabPageCustomizationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E1D662D0B2E9F00F9205B /* NewTabPageCustomizationProvider.swift */; };
+		372042D42DF9B0AD00CE099A /* InternalFeedbackFormTabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372042D32DF9B0A400CE099A /* InternalFeedbackFormTabExtension.swift */; };
+		372042D52DF9B0AD00CE099A /* InternalFeedbackFormTabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372042D32DF9B0A400CE099A /* InternalFeedbackFormTabExtension.swift */; };
+		372042E12DF9C04400CE099A /* internal-feedback-autofiller.js in Resources */ = {isa = PBXBuildFile; fileRef = 372042DF2DF9C04400CE099A /* internal-feedback-autofiller.js */; };
+		372042E22DF9C04400CE099A /* internal-feedback-autofiller.js in Resources */ = {isa = PBXBuildFile; fileRef = 372042DF2DF9C04400CE099A /* internal-feedback-autofiller.js */; };
 		372A0FEC2B2379310033BF7F /* SyncMetricsEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372A0FEB2B2379310033BF7F /* SyncMetricsEventsHandler.swift */; };
 		372A0FED2B2379310033BF7F /* SyncMetricsEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372A0FEB2B2379310033BF7F /* SyncMetricsEventsHandler.swift */; };
 		372BC2A12A4AFA47001D8FD5 /* SyncCredentialsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372BC2A02A4AFA47001D8FD5 /* SyncCredentialsAdapter.swift */; };
@@ -3232,6 +3236,8 @@
 		BB80DDD32D75EEAC00ED1FFF /* ApplicationBuildType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB80DDD12D75EEA100ED1FFF /* ApplicationBuildType.swift */; };
 		BB80DDDB2D761EC700ED1FFF /* DefaultBrowserAndDockPromptPresentingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB80DDDA2D761EC400ED1FFF /* DefaultBrowserAndDockPromptPresentingTests.swift */; };
 		BB80DDDC2D761EC700ED1FFF /* DefaultBrowserAndDockPromptPresentingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB80DDDA2D761EC400ED1FFF /* DefaultBrowserAndDockPromptPresentingTests.swift */; };
+		BB8D1FD72DF9C0EE007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D1FD62DF9C0E4007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift */; };
+		BB8D1FD82DF9C0EE007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D1FD62DF9C0E4007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift */; };
 		BB960BCD2DD77A0B002C46DD /* SettingsIconsProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB960BCC2DD77A02002C46DD /* SettingsIconsProviding.swift */; };
 		BB960BCE2DD77A0B002C46DD /* SettingsIconsProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB960BCC2DD77A02002C46DD /* SettingsIconsProviding.swift */; };
 		BB960BD32DD7890B002C46DD /* BookmarksIconsProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB960BD22DD788FD002C46DD /* BookmarksIconsProviding.swift */; };
@@ -4080,6 +4086,8 @@
 		371BFF5E2D39360E0075DB87 /* HistoryViewActionsManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewActionsManagerExtension.swift; sourceTree = "<group>"; };
 		371C0A2827E33EDC0070591F /* FeedbackPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackPresenter.swift; sourceTree = "<group>"; };
 		371E1D662D0B2E9F00F9205B /* NewTabPageCustomizationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabPageCustomizationProvider.swift; sourceTree = "<group>"; };
+		372042D32DF9B0A400CE099A /* InternalFeedbackFormTabExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalFeedbackFormTabExtension.swift; sourceTree = "<group>"; };
+		372042DF2DF9C04400CE099A /* internal-feedback-autofiller.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "internal-feedback-autofiller.js"; sourceTree = "<group>"; };
 		3720B7F82D00DA4500D20F23 /* WebKitExtensions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WebKitExtensions; sourceTree = "<group>"; };
 		372A0FEB2B2379310033BF7F /* SyncMetricsEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMetricsEventsHandler.swift; sourceTree = "<group>"; };
 		372BC2A02A4AFA47001D8FD5 /* SyncCredentialsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCredentialsAdapter.swift; sourceTree = "<group>"; };
@@ -5401,6 +5409,7 @@
 		BB80DDCE2D75E94A00ED1FFF /* DefaultBrowserAndDockPromptCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserAndDockPromptCoordinatorTests.swift; sourceTree = "<group>"; };
 		BB80DDD12D75EEA100ED1FFF /* ApplicationBuildType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationBuildType.swift; sourceTree = "<group>"; };
 		BB80DDDA2D761EC400ED1FFF /* DefaultBrowserAndDockPromptPresentingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserAndDockPromptPresentingTests.swift; sourceTree = "<group>"; };
+		BB8D1FD62DF9C0E4007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMessagingConfigMatcherProviderTests.swift; sourceTree = "<group>"; };
 		BB960BCC2DD77A02002C46DD /* SettingsIconsProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsIconsProviding.swift; sourceTree = "<group>"; };
 		BB960BD22DD788FD002C46DD /* BookmarksIconsProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksIconsProviding.swift; sourceTree = "<group>"; };
 		BB9BA21F2D10BC6B009229F3 /* TabBarRemoteMessageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarRemoteMessageViewModelTests.swift; sourceTree = "<group>"; };
@@ -6422,6 +6431,14 @@
 			path = RemoteMessaging;
 			sourceTree = "<group>";
 		};
+		372042E02DF9C04400CE099A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				372042DF2DF9C04400CE099A /* internal-feedback-autofiller.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		373A1AA6283ECC8000586521 /* HTML */ = {
 			isa = PBXGroup;
 			children = (
@@ -6435,6 +6452,7 @@
 		373B2F7F2C384DD20013A94B /* RemoteMessaging */ = {
 			isa = PBXGroup;
 			children = (
+				BB8D1FD62DF9C0E4007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift */,
 				373B2F802C384DEB0013A94B /* ActiveRemoteMessageModelTests.swift */,
 				37DB56EE2C3B31CD0093D4DC /* MockRemoteMessagingAvailabilityProvider.swift */,
 				37DB56F12C3B36B80093D4DC /* RemoteMessagingClientTests.swift */,
@@ -8731,6 +8749,7 @@
 		AA3863C227A1E1C000749AB5 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
+				372042E02DF9C04400CE099A /* Resources */,
 				AA3D531827A2F24C00074EC1 /* View */,
 				AA3D531927A2F47100074EC1 /* Model */,
 			);
@@ -9995,6 +10014,7 @@
 		B647EFB32922539400BA628D /* TabExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				372042D32DF9B0A400CE099A /* InternalFeedbackFormTabExtension.swift */,
 				B647EFBA2922584B00BA628D /* AdClickAttributionTabExtension.swift */,
 				3148727D2CC68F6200EEF89B /* AIChatTabExtension.swift */,
 				B6C00ECA292F839D009C73A6 /* AutofillTabExtension.swift */,
@@ -11721,6 +11741,7 @@
 				3706FCCA293F65D500E42796 /* FirePopoverCollectionViewHeader.xib in Resources */,
 				9FBB0C012CB94FC10006B6A6 /* view_highlight.json in Resources */,
 				3706FCCC293F65D500E42796 /* TabBar.storyboard in Resources */,
+				372042E22DF9C04400CE099A /* internal-feedback-autofiller.js in Resources */,
 				3706FCD0293F65D500E42796 /* BookmarksBarCollectionViewItem.xib in Resources */,
 				7B5A23762C46A4A8007213AC /* ExcludedDomains.storyboard in Resources */,
 				BBCB2FCC2DEA1DD800A97A6C /* fire-dark.json in Resources */,
@@ -11944,6 +11965,7 @@
 				AAE246F6270A3D3000BEEAEE /* FirePopoverCollectionViewHeader.xib in Resources */,
 				9FBB0C002CB94FC10006B6A6 /* view_highlight.json in Resources */,
 				AA80EC79256C46AA007083E7 /* TabBar.storyboard in Resources */,
+				372042E12DF9C04400CE099A /* internal-feedback-autofiller.js in Resources */,
 				4BE5336B286912D40019DBFD /* BookmarksBarCollectionViewItem.xib in Resources */,
 				7B5A23752C46A4A8007213AC /* ExcludedDomains.storyboard in Resources */,
 				BBCB2FCB2DEA1DD800A97A6C /* fire-dark.json in Resources */,
@@ -13122,6 +13144,7 @@
 				3706FC21293F65D500E42796 /* UserText+PasswordManager.swift in Sources */,
 				F118EA7E2BEA2B8700F77634 /* DefaultSubscriptionFeatureAvailability+DefaultInitializer.swift in Sources */,
 				3706FC22293F65D500E42796 /* LoadingProgressView.swift in Sources */,
+				372042D52DF9B0AD00CE099A /* InternalFeedbackFormTabExtension.swift in Sources */,
 				3706FC23293F65D500E42796 /* StatisticsStore.swift in Sources */,
 				37F09AD42DDE433500643A1B /* FaviconManagerMock.swift in Sources */,
 				1DDD3EBD2B84DCB9004CBF2B /* WebTrackingProtectionPreferences.swift in Sources */,
@@ -13655,6 +13678,7 @@
 				560C6ECA2CCA381A00D411E2 /* OnboardingPixelReporterTests.swift in Sources */,
 				3706FE62293F661700E42796 /* PasswordManagementListSectionTests.swift in Sources */,
 				37A756EE2DD610930003C8C9 /* NewTabPageCoordinatorTests.swift in Sources */,
+				BB8D1FD82DF9C0EE007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift in Sources */,
 				3706FE63293F661700E42796 /* RecentlyClosedCoordinatorMock.swift in Sources */,
 				1D638D622C44F2BA00530DD5 /* ApplicationUpdateDetectorTests.swift in Sources */,
 				1D6D04202D953E20005BC23F /* FullscreenControllerTests.swift in Sources */,
@@ -14634,6 +14658,7 @@
 				BD88A83E2C4F3E4300460A26 /* FeedbackCategoryProviding.swift in Sources */,
 				9F56CFB12B843F6C00BB7F11 /* BookmarksDialogViewFactory.swift in Sources */,
 				F1FD5B672C2B0AAA0040FA0D /* SubscriptionPagesUseSubscriptionFeature.swift in Sources */,
+				372042D42DF9B0AD00CE099A /* InternalFeedbackFormTabExtension.swift in Sources */,
 				B645D8F629FA95440024461F /* WKProcessPoolExtension.swift in Sources */,
 				9D9AE86B2AA76CF90026E7DC /* LoginItemsManager.swift in Sources */,
 				C18194642C7DF7D600381092 /* FreemiumDBPPresenter.swift in Sources */,
@@ -15478,6 +15503,7 @@
 				CD89DD612C89E08D0080F9AF /* MaliciousSiteProtectionTests.swift in Sources */,
 				310E79BF294A19A8007C49E8 /* FireproofingReferenceTests.swift in Sources */,
 				B6BBF1722744CE36004F850E /* FireproofDomainsStoreMock.swift in Sources */,
+				BB8D1FD72DF9C0EE007F2834 /* RemoteMessagingConfigMatcherProviderTests.swift in Sources */,
 				4BA1A6D9258C0CB300F6F690 /* DataEncryptionTests.swift in Sources */,
 				BB80DDD02D75E94D00ED1FFF /* DefaultBrowserAndDockPromptCoordinatorTests.swift in Sources */,
 				3798580D2D730E32008773F6 /* HistoryQueryKindExtensionTests.swift in Sources */,

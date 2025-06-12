@@ -156,7 +156,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let defaultBrowserAndDockPromptPresenter: DefaultBrowserAndDockPromptPresenter
     let defaultBrowserAndDockPromptKeyValueStore: DefaultBrowserAndDockPromptStorage
     let defaultBrowserAndDockPromptFeatureFlagger: DefaultBrowserAndDockPromptFeatureFlagger
-    let visualStyleManager: VisualStyleManagerProviding
+    let visualStyle: VisualStyleProviding
 
     let isAuthV2Enabled: Bool
     var subscriptionAuthV1toV2Bridge: any SubscriptionAuthV1toV2Bridge
@@ -453,15 +453,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         VPNAppState(defaults: .netP).isAuthV2Enabled = isAuthV2Enabled
 
-        windowControllersManager = WindowControllersManager(
+        let windowControllersManager = WindowControllersManager(
             pinnedTabsManagerProvider: pinnedTabsManagerProvider,
             subscriptionFeatureAvailability: DefaultSubscriptionFeatureAvailability(
                 privacyConfigurationManager: privacyConfigurationManager,
                 purchasePlatform: subscriptionAuthV1toV2Bridge.currentEnvironment.purchasePlatform, paidAIChatFlagStatusProvider: { featureFlagger.isFeatureOn(.paidAIChat) }
             )
         )
+        self.windowControllersManager = windowControllersManager
 
-        visualStyleManager = VisualStyleManager(featureFlagger: featureFlagger, internalUserDecider: internalUserDecider)
+        let visualStyleDecider = DefaultVisualStyleDecider(featureFlagger: featureFlagger, internalUserDecider: internalUserDecider)
+        visualStyle = visualStyleDecider.style
 
 #if DEBUG
         if AppVersion.runType.requiresEnvironment {
@@ -488,7 +490,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             pixelFiring: PixelKit.shared
         )
         startupPreferences = StartupPreferences(appearancePreferences: appearancePreferences, dataClearingPreferences: dataClearingPreferences)
-        newTabPageCustomizationModel = NewTabPageCustomizationModel(visualStyleManager: visualStyleManager, appearancePreferences: appearancePreferences)
+        newTabPageCustomizationModel = NewTabPageCustomizationModel(visualStyle: visualStyle, appearancePreferences: appearancePreferences)
 
         fireCoordinator = FireCoordinator(tld: tld)
 
@@ -588,10 +590,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     privacyConfigurationManager: privacyConfigurationManager
                 ),
                 subscriptionManager: subscriptionAuthV1toV2Bridge,
-                featureFlagger: self.featureFlagger
+                featureFlagger: self.featureFlagger,
+                visualStyle: self.visualStyle
             )
             activeRemoteMessageModel = ActiveRemoteMessageModel(remoteMessagingClient: remoteMessagingClient, openURLHandler: { url in
-                Application.appDelegate.windowControllersManager.showTab(with: .contentFromURL(url, source: .appOpenUrl))
+                windowControllersManager.showTab(with: .contentFromURL(url, source: .appOpenUrl))
+            }, navigateToFeedbackHandler: {
+                windowControllersManager.showFeedbackModal(preselectedFormOption: .feedback(feedbackCategory: .other))
             })
         } else {
             // As long as remoteMessagingClient is private to App Delegate and activeRemoteMessageModel
@@ -601,7 +606,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             activeRemoteMessageModel = ActiveRemoteMessageModel(
                 remoteMessagingStore: nil,
                 remoteMessagingAvailabilityProvider: nil,
-                openURLHandler: { _ in }
+                openURLHandler: { _ in },
+                navigateToFeedbackHandler: { }
             )
         }
 
