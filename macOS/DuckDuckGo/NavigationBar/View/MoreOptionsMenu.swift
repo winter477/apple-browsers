@@ -775,6 +775,7 @@ final class FeedbackSubMenu: NSMenu {
                                  moreOptionsMenuIconsProvider: MoreOptionsMenuIconsProviding) {
         removeAllItems()
 
+#if FEEDBACK
         let browserFeedbackItem = NSMenuItem(title: UserText.browserFeedback,
                                              action: #selector(sendFeedback(_:)),
                                              keyEquivalent: "")
@@ -803,8 +804,10 @@ final class FeedbackSubMenu: NSMenu {
             addItem(.separator())
             addItem(withTitle: "Copy Version", action: #selector(AppDelegate.copyVersion(_:)), keyEquivalent: "")
         }
+#endif
     }
 
+#if FEEDBACK
     @MainActor
     @objc private func sendFeedback(_ sender: Any?) {
         PixelKit.fire(MoreOptionsMenuPixel.feedbackActionClicked, frequency: .daily)
@@ -816,6 +819,7 @@ final class FeedbackSubMenu: NSMenu {
         PixelKit.fire(MoreOptionsMenuPixel.feedbackActionClicked, frequency: .daily)
         Application.appDelegate.openPProFeedback(sender)
     }
+#endif
 }
 
 final class ZoomSubMenu: NSMenu {

@@ -1,5 +1,5 @@
 //
-//  MockFreemiumDBPPixelExperimentManager.swift
+//  BerkeleyDB.h
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -16,14 +16,4 @@
 //  limitations under the License.
 //
 
-@testable import DuckDuckGo_Privacy_Browser
-
-class MockFreemiumDBPPixelExperimentManager: FreemiumDBPPixelExperimentManaging {
-    var isTreatment: Bool = true
-
-    var pixelParameters: [String: String]?
-
-    func assignUserToCohort() {
-    }
-
-}
+#import <db.h>
