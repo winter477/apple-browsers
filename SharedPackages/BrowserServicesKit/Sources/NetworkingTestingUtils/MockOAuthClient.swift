@@ -22,7 +22,6 @@ import Networking
 public class MockOAuthClient: OAuthClient {
 
     public init() {}
-
     public var isUserAuthenticated: Bool {
         internalCurrentTokenContainer != nil
     }
