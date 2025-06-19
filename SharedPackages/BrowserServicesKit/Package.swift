@@ -654,6 +654,7 @@ let package = Package(
             dependencies: [
                 "SecureStorage",
                 "SecureStorageTestsUtils",
+                "PixelKit"
             ]
         ),
         .testTarget(
