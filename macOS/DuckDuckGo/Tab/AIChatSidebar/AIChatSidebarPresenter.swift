@@ -119,6 +119,7 @@ final class AIChatSidebarPresenter: AIChatSidebarPresenting {
                 guard let self else { return }
 
                 context.duration = 0.25
+                context.allowsImplicitAnimation = true
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 sidebarHost.sidebarContainerLeadingConstraint?.animator().constant = newConstraintValue
             } completionHandler: { [weak self, tabID = sidebarHost.currentTabID] in
@@ -155,15 +156,10 @@ final class AIChatSidebarPresenter: AIChatSidebarPresenting {
 extension AIChatSidebarPresenter: AIChatSidebarHostingDelegate {
 
     func sidebarHostDidSelectTab(with tabID: TabIdentifier) {
-        guard featureFlagger.isFeatureOn(.aiChatSidebar) else { return }
-
-        let isShowingSidebar = sidebarProvider.isShowingSidebar(for: tabID)
-        updateSidebarConstraints(for: tabID, isShowingSidebar: isShowingSidebar, withAnimation: false)
+        updateSidebarConstraints(for: tabID, isShowingSidebar: isSidebarOpen(for: tabID), withAnimation: false)
     }
 
     func sidebarHostDidUpdateTabs() {
-        guard featureFlagger.isFeatureOn(.aiChatSidebar) else { return }
-
         let allPinnedTabIDs = windowControllersManager.pinnedTabsManagerProvider.currentPinnedTabManagers.flatMap { $0.tabViewModels.keys }.map { $0.uuid }
         let allTabIDs = windowControllersManager.allTabCollectionViewModels.flatMap { $0.tabViewModels.keys }.map { $0.uuid }
         sidebarProvider.cleanUp(for: allPinnedTabIDs + allTabIDs)
