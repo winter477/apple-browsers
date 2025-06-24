@@ -97,8 +97,6 @@ enum NetworkProtectionPixelEvent: PixelKitEventV2 {
     case networkProtectionWireguardErrorCannotSetWireguardConfig(_ error: Error)
 
     case networkProtectionNoAuthTokenFoundError
-    case networkProtectionVPNAccessRevoked(_ error: Error)
-    case networkProtectionUnmanagedSubscriptionError(_ error: Error)
 
     case networkProtectionRekeyAttempt
     case networkProtectionRekeyCompleted
@@ -282,12 +280,6 @@ enum NetworkProtectionPixelEvent: PixelKitEventV2 {
         case .networkProtectionNoAuthTokenFoundError:
             return "netp_no_auth_token_found_error"
 
-        case .networkProtectionVPNAccessRevoked:
-            return "vpn_access_revoked"
-
-        case .networkProtectionUnmanagedSubscriptionError:
-            return "vpn_access_unmanaged_error"
-
         case .networkProtectionRekeyAttempt:
             return "netp_rekey_attempt"
 
@@ -402,10 +394,6 @@ enum NetworkProtectionPixelEvent: PixelKitEventV2 {
             return error.pixelParameters
         case .networkProtectionConfigurationFailedToParse(let error):
             return error.pixelParameters
-        case .networkProtectionVPNAccessRevoked(let error):
-            return error.pixelParameters
-        case .networkProtectionUnmanagedSubscriptionError(let error):
-            return error.pixelParameters
         case .networkProtectionActiveUser,
                 .networkProtectionNewUser,
                 .networkProtectionControllerStartAttempt,
@@ -479,9 +467,7 @@ enum NetworkProtectionPixelEvent: PixelKitEventV2 {
                 .networkProtectionSystemExtensionActivationFailure(let error),
                 .networkProtectionServerMigrationFailure(let error),
                 .networkProtectionConfigurationErrorLoadingCachedConfig(let error),
-                .networkProtectionConfigurationFailedToParse(let error),
-                .networkProtectionVPNAccessRevoked(let error),
-                .networkProtectionUnmanagedSubscriptionError(let error):
+                .networkProtectionConfigurationFailedToParse(let error):
             return error
         case .networkProtectionActiveUser,
                 .networkProtectionNewUser,
