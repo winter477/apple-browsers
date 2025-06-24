@@ -125,7 +125,6 @@ public actor NetworkProtectionDeviceManager: NetworkProtectionDeviceManagement {
         case .success(let serverList):
             completeServerList = serverList
         case .failure(let failure):
-            await handle(clientError: failure)
             throw failure
         }
 
@@ -201,24 +200,38 @@ public actor NetworkProtectionDeviceManager: NetworkProtectionDeviceManagement {
     //
     // - Throws:`NetworkProtectionError`
     //
-    private func register(keyPair: KeyPair,
-                          selectionMethod: NetworkProtectionServerSelectionMethod) async throws -> (server: NetworkProtectionServer,
+    private func register(
+        keyPair: KeyPair,
+        selectionMethod: NetworkProtectionServerSelectionMethod) async throws -> (server: NetworkProtectionServer,
                                                                                                     newExpiration: Date?) {
+
+        func accessRevokedError(underlyingError: Error) -> Error {
+            let wrappedError = NetworkProtectionError.vpnAccessRevoked(underlyingError)
+            errorEvents?.fire(wrappedError)
+            return wrappedError
+        }
+
+        func unmanagedSubscriptionError(underlyingError: Error) -> Error {
+            let wrappedError = NetworkProtectionError.unmanagedSubscriptionError(underlyingError)
+            errorEvents?.fire(wrappedError)
+            return wrappedError
+        }
 
         Logger.networkProtection.log("Registering with server using method: \(selectionMethod.debugDescription, privacy: .public)")
 
         let token: String
 
         do {
+            throw SubscriptionManagerError.noTokenAvailable
             token = try await VPNAuthTokenBuilder.getVPNAuthToken(from: tokenHandler)
         } catch {
             Logger.networkProtection.error("Missing auth token: \(error.localizedDescription)")
 
             switch error {
             case SubscriptionManagerError.noTokenAvailable:
-                throw NetworkProtectionError.vpnAccessRevoked(error)
+                throw accessRevokedError(underlyingError: error)
             default:
-                throw NetworkProtectionError.noAuthTokenFound(error)
+                throw unmanagedSubscriptionError(underlyingError: error)
             }
         }
 
@@ -264,8 +277,13 @@ public actor NetworkProtectionDeviceManager: NetworkProtectionDeviceManagement {
             return (selectedServer, selectedServer.expirationDate)
         case .failure(let error):
             Logger.networkProtection.error("Server registration failed: \(error, privacy: .public)")
-            await handle(clientError: error)
-            try handleAccessRevoked(error)
+
+            switch error {
+            case .accessDenied, .invalidAuthToken:
+                throw accessRevokedError(underlyingError: error)
+            default:
+                throw unmanagedSubscriptionError(underlyingError: error)
+            }
             throw error
         }
     }
@@ -345,26 +363,6 @@ public actor NetworkProtectionDeviceManager: NetworkProtectionDeviceManagement {
         peerConfiguration.endpoint = serverEndpoint
 
         return peerConfiguration
-    }
-
-    private func handle(clientError: NetworkProtectionClientError) async {
- #if os(macOS)
-        if case .invalidAuthToken = clientError {
-            try? await tokenHandler.removeToken()
-        }
- #endif
-        errorEvents?.fire(clientError.networkProtectionError)
-    }
-
-    private func handleAccessRevoked(_ error: NetworkProtectionClientError) throws {
-        switch error {
-        case .accessDenied, .invalidAuthToken:
-            let newError = NetworkProtectionError.vpnAccessRevoked(error)
-            errorEvents?.fire(newError)
-            throw newError
-        default:
-            break
-        }
     }
 }
 
