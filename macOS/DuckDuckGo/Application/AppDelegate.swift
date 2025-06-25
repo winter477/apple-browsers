@@ -890,9 +890,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        vpnAppEventsHandler.applicationDidBecomeActive()
-
         Task { @MainActor in
+            await vpnAppEventsHandler.applicationDidBecomeActive()
             await subscriptionCookieManager.refreshSubscriptionCookie()
         }
     }
