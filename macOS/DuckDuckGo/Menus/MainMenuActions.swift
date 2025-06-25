@@ -773,10 +773,24 @@ extension MainViewController {
     }
 
     @objc func summarize(_ sender: Any) {
-        guard featureFlagger.isFeatureOn(.aiChatTextSummarization) else {
+        guard featureFlagger.isFeatureOn(.aiChatTextSummarization), featureFlagger.isFeatureOn(.aiChatSidebar) else {
             return
         }
         Logger.aiChat.debug("Summarize action to be implemented")
+
+        Task {
+            do {
+                let selectedText = try await getActiveTabAndIndex()?.tab.webView.evaluateJavaScript("window.getSelection().toString()") as? String
+                guard let selectedText, !selectedText.isEmpty else {
+                    return
+                }
+                NotificationCenter.default.post(name: .aiChatSummarizationQuery,
+                                                object: selectedText,
+                                                userInfo: nil)
+            } catch {
+                Logger.aiChat.error("Failed to get selected text from the webView")
+            }
+        }
     }
 
     @objc func toggleDownloads(_ sender: Any) {
