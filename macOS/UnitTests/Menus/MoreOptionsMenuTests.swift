@@ -46,7 +46,7 @@ final class MoreOptionsMenuTests: XCTestCase {
     private var mockFreemiumDBPPresenter = MockFreemiumDBPPresenter()
     private var mockFreemiumDBPFeature: MockFreemiumDBPFeature!
     private var mockNotificationCenter: MockNotificationCenter!
-    private var mockPixelHandler: MockFreemiumDBPExperimentPixelHandler!
+    private var mockPixelHandler: MockDataBrokerProtectionFreemiumPixelHandler!
     private var mockFreemiumDBPUserStateManager: MockFreemiumDBPUserStateManager!
     private var mockFeatureFlagger: MockFeatureFlagger!
 
@@ -81,7 +81,7 @@ final class MoreOptionsMenuTests: XCTestCase {
         mockFreemiumDBPFeature = MockFreemiumDBPFeature()
 
         mockNotificationCenter = MockNotificationCenter()
-        mockPixelHandler = MockFreemiumDBPExperimentPixelHandler()
+        mockPixelHandler = MockDataBrokerProtectionFreemiumPixelHandler()
         mockFreemiumDBPUserStateManager = MockFreemiumDBPUserStateManager()
     }
 
@@ -114,7 +114,7 @@ final class MoreOptionsMenuTests: XCTestCase {
                                           defaultBrowserPreferences: .init(defaultBrowserProvider: defaultBrowserProvider),
                                           notificationCenter: mockNotificationCenter,
                                           featureFlagger: mockFeatureFlagger,
-                                          freemiumDBPExperimentPixelHandler: mockPixelHandler)
+                                          dataBrokerProtectionFreemiumPixelHandler: mockPixelHandler)
 
         moreOptionsMenu.actionDelegate = capturingActionDelegate
     }
@@ -229,17 +229,18 @@ final class MoreOptionsMenuTests: XCTestCase {
         XCTAssertTrue(moreOptionsMenu.items[15].isSeparatorItem)
         XCTAssertEqual(moreOptionsMenu.items[16].title, UserText.subscriptionOptionsMenuItem)
         XCTAssertFalse(moreOptionsMenu.items[16].hasSubmenu)
-        XCTAssertEqual(moreOptionsMenu.items[17].title, UserText.freemiumDBPOptionsMenuItem)
-        XCTAssertTrue(moreOptionsMenu.items[18].isSeparatorItem)
-        XCTAssertEqual(moreOptionsMenu.items[19].title, UserText.fireproofSite)
-        XCTAssertEqual(moreOptionsMenu.items[20].title, UserText.deleteBrowsingDataMenuItem)
-        XCTAssertTrue(moreOptionsMenu.items[21].isSeparatorItem)
-        XCTAssertEqual(moreOptionsMenu.items[22].title, UserText.findInPageMenuItem)
-        XCTAssertEqual(moreOptionsMenu.items[23].title, UserText.shareMenuItem)
-        XCTAssertEqual(moreOptionsMenu.items[24].title, UserText.printMenuItem)
-        XCTAssertTrue(moreOptionsMenu.items[25].isSeparatorItem)
-        XCTAssertEqual(moreOptionsMenu.items[26].title, UserText.mainMenuHelp)
-        XCTAssertEqual(moreOptionsMenu.items[27].title, UserText.settings)
+        XCTAssertTrue(moreOptionsMenu.items[17].isSeparatorItem)
+        XCTAssertEqual(moreOptionsMenu.items[18].title, UserText.freemiumDBPOptionsMenuItem)
+        XCTAssertTrue(moreOptionsMenu.items[19].isSeparatorItem)
+        XCTAssertEqual(moreOptionsMenu.items[20].title, UserText.fireproofSite)
+        XCTAssertEqual(moreOptionsMenu.items[21].title, UserText.deleteBrowsingDataMenuItem)
+        XCTAssertTrue(moreOptionsMenu.items[22].isSeparatorItem)
+        XCTAssertEqual(moreOptionsMenu.items[23].title, UserText.findInPageMenuItem)
+        XCTAssertEqual(moreOptionsMenu.items[24].title, UserText.shareMenuItem)
+        XCTAssertEqual(moreOptionsMenu.items[25].title, UserText.printMenuItem)
+        XCTAssertTrue(moreOptionsMenu.items[26].isSeparatorItem)
+        XCTAssertEqual(moreOptionsMenu.items[27].title, UserText.mainMenuHelp)
+        XCTAssertEqual(moreOptionsMenu.items[28].title, UserText.settings)
     }
 
     @MainActor
@@ -259,7 +260,7 @@ final class MoreOptionsMenuTests: XCTestCase {
         XCTAssertTrue(mockFreemiumDBPPresenter.didCallShowFreemium)
         XCTAssertTrue(mockNotificationCenter.didCallPostNotification)
         XCTAssertEqual(mockNotificationCenter.lastPostedNotification, .freemiumDBPEntryPointActivated)
-        XCTAssertEqual(mockPixelHandler.lastFiredEvent, FreemiumDBPExperimentPixel.overFlowScan)
+        XCTAssertEqual(mockPixelHandler.lastFiredEvent, DataBrokerProtectionFreemiumPixels.overFlowScan)
     }
 
     @MainActor
@@ -280,7 +281,7 @@ final class MoreOptionsMenuTests: XCTestCase {
         XCTAssertTrue(mockFreemiumDBPPresenter.didCallShowFreemium)
         XCTAssertTrue(mockNotificationCenter.didCallPostNotification)
         XCTAssertEqual(mockNotificationCenter.lastPostedNotification, .freemiumDBPEntryPointActivated)
-        XCTAssertEqual(mockPixelHandler.lastFiredEvent, FreemiumDBPExperimentPixel.overFlowResults)
+        XCTAssertEqual(mockPixelHandler.lastFiredEvent, DataBrokerProtectionFreemiumPixels.overFlowResults)
     }
 
     // MARK: - Paid AI Chat
