@@ -17,12 +17,18 @@
 //
 
 import Foundation
-@testable import BrowserServicesKit
 
-class MockContentScopeExperimentManager: ContentScopeExperimentsManaging {
-    var allActiveContentScopeExperiments: Experiments = [:]
+public class MockContentScopeExperimentManager: ContentScopeExperimentsManaging {
+    public var allActiveContentScopeExperiments: Experiments = [:]
+    public var resolveContentScopeScriptActiveExperimentsCalled = false
 
-    func resolveContentScopeScriptActiveExperiments() -> Experiments {
+    public init(allActiveContentScopeExperiments: Experiments = [:], resolveContentScopeScriptActiveExperimentsCalled: Bool = false) {
+        self.allActiveContentScopeExperiments = allActiveContentScopeExperiments
+        self.resolveContentScopeScriptActiveExperimentsCalled = resolveContentScopeScriptActiveExperimentsCalled
+    }
+
+    public func resolveContentScopeScriptActiveExperiments() -> Experiments {
+        resolveContentScopeScriptActiveExperimentsCalled = true
         return allActiveContentScopeExperiments
     }
 }

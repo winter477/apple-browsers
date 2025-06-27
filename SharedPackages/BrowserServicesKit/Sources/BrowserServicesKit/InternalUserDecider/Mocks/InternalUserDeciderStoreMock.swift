@@ -1,5 +1,5 @@
 //
-//  MockInternalUserStoring.swift
+//  InternalUserDeciderStoreMock.swift
 //
 //  Copyright © 2023 DuckDuckGo. All rights reserved.
 //
@@ -17,14 +17,13 @@
 //
 
 import Foundation
-import BrowserServicesKit
+import Combine
 
-final class MockInternalUserStoring: InternalUserStoring {
-    var isInternalUser: Bool = false
-}
+public class InternalUserDeciderStoreMock: InternalUserStoring {
 
-extension DefaultInternalUserDecider {
-    convenience init(mockedStore: MockInternalUserStoring = MockInternalUserStoring()) {
-        self.init(store: mockedStore)
+    public var isInternalUser: Bool = false
+
+    public init(isInternalUser: Bool = false) {
+        self.isInternalUser = isInternalUser
     }
 }
