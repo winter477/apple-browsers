@@ -109,6 +109,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     var privacyDashboardWindow: NSWindow?
 
     let windowControllersManager: WindowControllersManager
+    let subscriptionNavigationCoordinator: SubscriptionNavigationCoordinator
 
     let appearancePreferences: AppearancePreferences
     let dataClearingPreferences: DataClearingPreferences
@@ -478,6 +479,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             featureFlagger: featureFlagger
         )
         self.windowControllersManager = windowControllersManager
+
+        let subscriptionNavigationCoordinator = SubscriptionNavigationCoordinator(
+            tabShower: windowControllersManager,
+            subscriptionManager: subscriptionAuthV1toV2Bridge
+        )
+        self.subscriptionNavigationCoordinator = subscriptionNavigationCoordinator
 
         self.visualStyleDecider = DefaultVisualStyleDecider(featureFlagger: featureFlagger, internalUserDecider: internalUserDecider)
         visualStyle = visualStyleDecider.style
