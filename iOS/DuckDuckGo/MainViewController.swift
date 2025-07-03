@@ -1906,11 +1906,17 @@ class MainViewController: UIViewController {
     private func onEntitlementsChange(_ notification: Notification) {
         Task {
             let subscriptionManager = AppDependencyProvider.shared.subscriptionAuthV1toV2Bridge
+            guard let userInfo = notification.userInfo,
+                  let payload = EntitlementsDidChangePayload(notificationUserInfo: userInfo) else {
+                assertionFailure("Missing entitlements payload")
+                Logger.subscription.fault("Missing entitlements payload")
+                return
+            }
+            let hasEntitlement = payload.entitlements.contains(.networkProtection)
             let isAuthV2Enabled = AppDependencyProvider.shared.isAuthV2Enabled
             let isSubscriptionActive = try? await subscriptionManager.getSubscription(cachePolicy: .cacheOnly).isActive
 
-            guard let hasEntitlement = try? await subscriptionManager.isEnabled(feature: .networkProtection),
-                      hasEntitlement == false
+            guard hasEntitlement == false
             else {
                 PixelKit.fire(
                     VPNSubscriptionStatusPixel.vpnFeatureEnabled(
