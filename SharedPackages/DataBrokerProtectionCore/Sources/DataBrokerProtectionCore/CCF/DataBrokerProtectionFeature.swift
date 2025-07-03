@@ -49,14 +49,17 @@ public class DataBrokerProtectionFeature: Subfeature {
     weak var delegate: CCFCommunicationDelegate?
 
     private var actionResponseTimer: Timer?
-    private var taskCancellationTimer: Timer?
+    private let actionResponseTimeout: TimeInterval
 
-    private let executionConfig: BrokerJobExecutionConfig
+    public struct Constants {
+        /// Default timeout for C-S-S action responses that can hang due to page reloads or script context loss
+        public static let defaultActionResponseTimeout: TimeInterval = 60
+    }
 
     public init(delegate: CCFCommunicationDelegate,
-                executionConfig: BrokerJobExecutionConfig) {
+                actionResponseTimeout: TimeInterval = Constants.defaultActionResponseTimeout) {
         self.delegate = delegate
-        self.executionConfig = executionConfig
+        self.actionResponseTimeout = actionResponseTimeout
     }
 
     public func handler(forMethodNamed methodName: String) -> Handler? {
@@ -74,7 +77,7 @@ public class DataBrokerProtectionFeature: Subfeature {
     }
 
     func onActionCompleted(params: Any, original: WKScriptMessage) async throws -> Encodable? {
-        removeTimers()
+        removeTimer()
 
         Logger.action.log("Action completed")
 
@@ -123,7 +126,7 @@ public class DataBrokerProtectionFeature: Subfeature {
     }
 
     func onActionError(params: Any, original: WKScriptMessage) async throws -> Encodable? {
-        removeTimers()
+        removeTimer()
 
         let error = DataBrokerProtectionError.parse(params: params)
         Logger.action.log("Action Error: \(String(describing: error.localizedDescription), privacy: .public)")
@@ -136,7 +139,7 @@ public class DataBrokerProtectionFeature: Subfeature {
         self.broker = broker
     }
 
-    func pushAction(method: CCFSubscribeActionName, webView: WKWebView, params: Encodable) {
+    func pushAction(method: CCFSubscribeActionName, webView: WKWebView, params: Encodable, canTimeOut: Bool) {
         guard let broker = broker else {
             assertionFailure("Cannot continue without broker instance")
             return
@@ -145,38 +148,32 @@ public class DataBrokerProtectionFeature: Subfeature {
 
         broker.push(method: method.rawValue, params: params, for: self, into: webView)
 
-        installTimer(for: (params as? Params)?.state.action)
+        if canTimeOut {
+            installTimer(for: (params as? Params)?.state.action)
+        }
     }
 
     private func installTimer(for action: Action?) {
         guard let action else { return }
 
-        removeTimers()
-        actionResponseTimer = Timer.scheduledTimer(withTimeInterval: executionConfig.cssActionTimeout, repeats: false) { [weak self] _ in
+        removeTimer()
+        actionResponseTimer = Timer.scheduledTimer(withTimeInterval: actionResponseTimeout, repeats: false) { [weak self] _ in
             self?.handleTimeout(for: action)
-        }
-        taskCancellationTimer = Timer.scheduledTimer(withTimeInterval: executionConfig.cssActionCancellationCheckInterval, repeats: true) { [weak self] _ in
-            if Task.isCancelled {
-                self?.handleTimeout(for: action)
-            }
         }
     }
 
     private func handleTimeout(for action: Action) {
         Logger.action.log("Action timeout: \(String(describing: action))")
 
-        removeTimers()
+        removeTimer()
         Task {
             await delegate?.onError(error: DataBrokerProtectionError.actionFailed(actionID: action.id,
                                                                                   message: "Action timed out"))
         }
     }
 
-    private func removeTimers() {
+    private func removeTimer() {
         actionResponseTimer?.invalidate()
         actionResponseTimer = nil
-
-        taskCancellationTimer?.invalidate()
-        taskCancellationTimer = nil
     }
 }

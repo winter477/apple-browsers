@@ -40,7 +40,6 @@ final class DataBrokerProtectionWebViewHandler: NSObject, WebViewHandler {
     private var activeContinuation: CheckedContinuation<Void, Error>?
 
     private let isFakeBroker: Bool
-    private let executionConfig: BrokerJobExecutionConfig
     private var webViewConfiguration: WKWebViewConfiguration?
     private var userContentController: DataBrokerUserContentController?
 
@@ -54,16 +53,14 @@ final class DataBrokerProtectionWebViewHandler: NSObject, WebViewHandler {
 
     private var timer: Timer?
 
-    init(privacyConfig: PrivacyConfigurationManaging, prefs: ContentScopeProperties, delegate: CCFCommunicationDelegate, isFakeBroker: Bool = false, executionConfig: BrokerJobExecutionConfig) {
-        self.isFakeBroker = isFakeBroker
-        self.executionConfig = executionConfig
-        
+    init(privacyConfig: PrivacyConfigurationManaging, prefs: ContentScopeProperties, delegate: CCFCommunicationDelegate, isFakeBroker: Bool = false) {
         let configuration = WKWebViewConfiguration()
-        configuration.applyDataBrokerConfiguration(privacyConfig: privacyConfig, prefs: prefs, delegate: delegate, executionConfig: executionConfig)
+        configuration.applyDataBrokerConfiguration(privacyConfig: privacyConfig, prefs: prefs, delegate: delegate)
         configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
 
         self.webViewConfiguration = configuration
+        self.isFakeBroker = isFakeBroker
 
         let userContentController = configuration.userContentController as? DataBrokerUserContentController
         assert(userContentController != nil)
@@ -148,7 +145,8 @@ final class DataBrokerProtectionWebViewHandler: NSObject, WebViewHandler {
         userContentController?.dataBrokerUserScripts?.dataBrokerFeature.pushAction(
             method: .onActionReceived,
             webView: self.webView!,
-            params: Params(state: ActionRequest(action: action, data: data))
+            params: Params(state: ActionRequest(action: action, data: data)),
+            canTimeOut: action.canTimeOut(while: stepType)
         )
     }
 

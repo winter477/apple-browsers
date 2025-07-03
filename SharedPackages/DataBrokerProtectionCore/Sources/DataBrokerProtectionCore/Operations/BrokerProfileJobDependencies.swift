@@ -91,7 +91,6 @@ public struct BrokerProfileJobDependencies: BrokerProfileJobDependencyProviding 
             captchaService: self.captchaService,
             stageDurationCalculator: stageDurationCalculator,
             pixelHandler: self.pixelHandler,
-            executionConfig: self.executionConfig,
             shouldRunNextStep: shouldRunNextStep
         )
     }
@@ -107,7 +106,6 @@ public struct BrokerProfileJobDependencies: BrokerProfileJobDependencyProviding 
             captchaService: self.captchaService,
             stageCalculator: stageDurationCalculator,
             pixelHandler: self.pixelHandler,
-            executionConfig: self.executionConfig,
             shouldRunNextStep: shouldRunNextStep
         )
     }
