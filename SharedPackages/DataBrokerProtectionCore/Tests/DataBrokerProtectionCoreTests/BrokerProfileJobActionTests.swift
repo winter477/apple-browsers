@@ -50,7 +50,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
 
@@ -76,7 +76,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
 
@@ -109,7 +109,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
 
@@ -140,7 +140,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.webViewHandler = webViewHandler
@@ -164,7 +164,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         emailService.shouldThrow = true
@@ -214,7 +214,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.webViewHandler = webViewHandler
@@ -237,7 +237,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.webViewHandler = webViewHandler
@@ -261,7 +261,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         let actionsHandler = ActionsHandler(step: step)
@@ -292,7 +292,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.webViewHandler = webViewHandler
@@ -316,7 +316,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.resetRetriesCount()
@@ -341,7 +341,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.webViewHandler = webViewHandler
@@ -361,7 +361,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
         sut.webViewHandler = webViewHandler
@@ -524,7 +524,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
 
@@ -547,7 +547,7 @@ final class BrokerProfileJobActionTests: XCTestCase {
             operationAwaitTime: 0,
             stageCalculator: stageCalulator,
             pixelHandler: pixelHandler,
-            executionConfig: BrokerJobExecutionConfig(),
+            executionConfig: .init(),
             shouldRunNextStep: { true }
         )
 
