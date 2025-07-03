@@ -1950,8 +1950,9 @@ class MainViewController: UIViewController {
             let hasEntitlement = payload.entitlements.contains(.networkProtection)
             let isAuthV2Enabled = AppDependencyProvider.shared.isAuthV2Enabled
             let isSubscriptionActive = try? await subscriptionManager.getSubscription(cachePolicy: .cacheOnly).isActive
+            let hasEntitlements = (try? await subscriptionManager.isEnabled(feature: .networkProtection)) ?? false
 
-            if hasEntitlement {
+            if hasEntitlements {
                 PixelKit.fire(
                     VPNSubscriptionStatusPixel.vpnFeatureEnabled(
                         isSubscriptionActive: isSubscriptionActive,
