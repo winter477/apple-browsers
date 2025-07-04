@@ -53,7 +53,6 @@ final class VPNSubscriptionEventsHandler {
         get {
             userDefaults.networkProtectionEntitlementsExpired
         }
-
         set {
             userDefaults.networkProtectionEntitlementsExpired = newValue
         }
