@@ -2041,6 +2041,7 @@
 		7B60AFFF2C51426A008E32A3 /* VPNURLEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60AFFC2C514260008E32A3 /* VPNURLEventHandler.swift */; };
 		7B60B0022C5145EC008E32A3 /* VPNUIActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0002C514541008E32A3 /* VPNUIActionHandler.swift */; };
 		7B60B0032C5145ED008E32A3 /* VPNUIActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0002C514541008E32A3 /* VPNUIActionHandler.swift */; };
+		7B6413522E1922FC0035D14D /* VPNNotifications in Frameworks */ = {isa = PBXBuildFile; productRef = 7B6413512E1922FC0035D14D /* VPNNotifications */; };
 		7B6545ED2C0778BB00115BEA /* VPNControllerUDSClient+ConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6545EC2C0778BB00115BEA /* VPNControllerUDSClient+ConvenienceInitializers.swift */; };
 		7B6545EE2C0779D500115BEA /* VPNControllerUDSClient+ConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6545EC2C0778BB00115BEA /* VPNControllerUDSClient+ConvenienceInitializers.swift */; };
 		7B7614372D79F85800BC6293 /* VPNAppState in Frameworks */ = {isa = PBXBuildFile; productRef = 7B7614362D79F85800BC6293 /* VPNAppState */; };
@@ -5814,6 +5815,7 @@
 				7BC26CB02DFC11F300E52480 /* VPN in Frameworks */,
 				7BC3E4662D6DF6B8009787CD /* WireGuard in Frameworks */,
 				7BC3E4582D6DF670009787CD /* FeatureFlags in Frameworks */,
+				7B6413522E1922FC0035D14D /* VPNNotifications in Frameworks */,
 				7B2E36602D6DEFBB00A08CB7 /* NetworkExtension.framework in Frameworks */,
 				7BC3E4622D6DF6AC009787CD /* Persistence in Frameworks */,
 				7BC3E4562D6DF66C009787CD /* Configuration in Frameworks */,
@@ -11225,6 +11227,7 @@
 				7BC3E4632D6DF6B2009787CD /* Subscription */,
 				7BC3E4652D6DF6B8009787CD /* WireGuard */,
 				7BC26CAF2DFC11F300E52480 /* VPN */,
+				7B6413512E1922FC0035D14D /* VPNNotifications */,
 			);
 			productName = DuckDuckGoVPNSysexAppStore;
 			productReference = 7B2E365F2D6DEFBB00A08CB7 /* com.duckduckgo.mobile.ios.vpn.agent.network-extension.debug.systemextension */;
@@ -17334,6 +17337,10 @@
 		7B3A16432D4B7A9C00D4C869 /* AppInfoRetriever */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppInfoRetriever;
+		};
+		7B6413512E1922FC0035D14D /* VPNNotifications */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VPNNotifications;
 		};
 		7B7614362D79F85800BC6293 /* VPNAppState */ = {
 			isa = XCSwiftPackageProductDependency;
