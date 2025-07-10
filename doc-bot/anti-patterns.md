@@ -1,8 +1,8 @@
 ---
-description: Anti-patterns to avoid and common mistakes to prevent in DuckDuckGo browser development
-globs:
-  - "**/*.swift"
 alwaysApply: true
+title: "Anti-patterns and Common Mistakes"
+description: "Anti-patterns to avoid and common mistakes to prevent in DuckDuckGo browser development including singleton misuse, memory leaks, and performance issues"
+keywords: ["anti-patterns", "common mistakes", "singletons", "memory leaks", "async/await", "error handling", "performance", "testing"]
 ---
 
 # Anti-patterns and Common Mistakes to Avoid

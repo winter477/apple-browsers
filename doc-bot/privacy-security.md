@@ -1,10 +1,8 @@
 ---
-description: Privacy and security guidelines for DuckDuckGo browser development
-globs:
-  - "**/*.swift"
-  - "**/Security/**"
-  - "**/Privacy/**"
 alwaysApply: true
+title: "Privacy & Security Guidelines"
+description: "Privacy and security guidelines for DuckDuckGo browser development with privacy-by-design principles"
+keywords: ["privacy", "security", "keychain", "data protection", "HTTPS", "authentication", "content blocking", "cookies"]
 ---
 
 # Privacy & Security Guidelines

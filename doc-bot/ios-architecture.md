@@ -1,9 +1,7 @@
 ---
-description: iOS-specific architecture patterns and best practices for DuckDuckGo browser
-globs:
-  - "iOS/**/*.swift"
-  - "iOS/**/*.storyboard"
-  - "iOS/**/*.xib"
+title: "iOS Architecture Patterns & Best Practices"
+description: "iOS-specific architecture patterns and best practices for DuckDuckGo browser including dependency injection, AppDependencyProvider, and MainCoordinator"
+keywords: ["iOS", "architecture", "AppDependencyProvider", "MainCoordinator", "dependency injection", "MVVM", "SwiftUI", "UIKit"]
 alwaysApply: false
 ---
 

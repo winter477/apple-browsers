@@ -1,7 +1,7 @@
 ---
-description: macOS system integration patterns including services, extensions, and background agents
-globs:
-  - "macOS/**/*.swift"
+title: "macOS System Integration Patterns"
+description: "macOS system integration patterns including services, extensions, background agents, login items, and workspace integration"
+keywords: ["macOS", "system integration", "background agents", "system extensions", "login items", "notifications", "app groups", "workspace"]
 alwaysApply: false
 ---
 
@@ -420,4 +420,4 @@ enum SystemExtensionNotification: String {
 }
 ```
 
-See `macos-window-management.mdc` for window management patterns and `macos-preferences.mdc` for preferences UI patterns.
+See `macos-window-management.md` for window management patterns and `macos-preferences.md` for preferences UI patterns.

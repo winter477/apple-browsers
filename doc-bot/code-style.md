@@ -1,8 +1,8 @@
 ---
-description: Swift code style and conventions for DuckDuckGo browser
-globs:
-  - "**/*.swift"
 alwaysApply: true
+title: "Swift Code Style Guide"
+description: "Swift code style and conventions for DuckDuckGo browser development including naming, formatting, and best practices"
+keywords: ["Swift", "code style", "naming conventions", "formatting", "best practices", "async/await", "property wrappers"]
 ---
 
 # Swift Code Style Guide

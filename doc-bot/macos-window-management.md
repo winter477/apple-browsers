@@ -1,7 +1,7 @@
 ---
-description: macOS window management and AppKit patterns for DuckDuckGo browser
-globs:
-  - "macOS/**/*.swift"
+title: "macOS Window Management & AppKit Patterns"
+description: "macOS window management and AppKit patterns for DuckDuckGo browser including WindowsManager, NSViewController lifecycle, and multi-window state"
+keywords: ["macOS", "window management", "AppKit", "NSWindowController", "TabCollectionViewModel", "state restoration", "NSHostingView"]
 alwaysApply: false
 ---
 
@@ -303,4 +303,4 @@ extension WindowsManager {
 }
 ```
 
-See `macos-system-integration.mdc` for system-level integration patterns and `macos-preferences.mdc` for preferences management.
+See `macos-system-integration.md` for system-level integration patterns and `macos-preferences.md` for preferences management.

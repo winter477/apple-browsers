@@ -1,8 +1,7 @@
 ---
-description: Advanced SwiftUI patterns for DuckDuckGo browser development
-globs:
-  - "**/*View.swift"
-  - "**/*ViewModel.swift"
+title: "Advanced SwiftUI Patterns"
+description: "Advanced SwiftUI patterns for DuckDuckGo browser development including ViewModifiers, PreferenceKeys, and sophisticated animations"
+keywords: ["SwiftUI", "advanced patterns", "ViewModifier", "PreferenceKey", "animations", "Layout protocol", "@Observable", "environment"]
 alwaysApply: false
 ---
 
@@ -134,7 +133,7 @@ struct FeatureView: View {
     @StateObject private var viewModel: FeatureViewModel
     
     init() {
-        // Note: This approach has limitations - see ios-architecture.mdc for preferred DI pattern
+        // Note: This approach has limitations - see ios-architecture.md for preferred DI pattern
     }
     
     var body: some View {
@@ -271,4 +270,4 @@ struct ModernFeatureView: View {
 }
 ```
 
-See `swiftui-style.mdc` for basic SwiftUI patterns and design system integration.
+See `swiftui-style.md` for basic SwiftUI patterns and design system integration.

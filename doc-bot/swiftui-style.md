@@ -1,10 +1,8 @@
 ---
-description: SwiftUI coding style and design system integration for DuckDuckGo browser
-globs:
-  - "**/*View.swift"
-  - "**/*ViewModel.swift"
-  - "**/SwiftUI/**/*.swift"
 alwaysApply: false
+title: "SwiftUI Style Guide with Design System Integration"
+description: "SwiftUI coding style and design system integration for DuckDuckGo browser including mandatory DesignResourcesKit usage"
+keywords: ["SwiftUI", "design system", "DesignResourcesKit", "colors", "icons", "typography", "accessibility", "performance"]
 ---
 
 # SwiftUI Style Guide with Design System Integration for DuckDuckGo Browser

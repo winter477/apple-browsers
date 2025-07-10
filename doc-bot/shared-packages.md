@@ -1,8 +1,7 @@
 ---
-description: Guidelines for working with shared packages between iOS and macOS
-globs:
-  - "SharedPackages/**/*.swift"
-  - "**/Package.swift"
+title: "Shared Packages Development Guidelines"
+description: "Guidelines for working with shared packages between iOS and macOS including cross-platform compatibility and package structure"
+keywords: ["shared packages", "cross-platform", "Swift Package Manager", "iOS", "macOS", "dependency management", "versioning"]
 alwaysApply: false
 ---
 

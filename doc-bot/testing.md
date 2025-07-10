@@ -1,10 +1,8 @@
 ---
-description: Testing guidelines and best practices for DuckDuckGo browser
-globs:
-  - "**/*Tests.swift"
-  - "**/*Test.swift"
-  - "**/Tests/**/*.swift"
 alwaysApply: false
+title: "Testing Guidelines & Best Practices"
+description: "Testing guidelines and best practices for DuckDuckGo browser including unit tests, mocks, async testing, and performance tests"
+keywords: ["testing", "unit tests", "XCTest", "mocks", "async testing", "UI tests", "performance tests", "TDD"]
 ---
 
 # Testing Guidelines for DuckDuckGo Browser

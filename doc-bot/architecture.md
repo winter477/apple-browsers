@@ -1,9 +1,8 @@
 ---
-description: Architecture patterns and best practices for DuckDuckGo browser
-globs:
-  - "**/*.swift"
-  - "**/Package.swift"
 alwaysApply: false
+title: "Architecture Patterns & Guidelines"
+description: "Architecture patterns and best practices for DuckDuckGo browser including MVVM, dependency injection, and code organization"
+keywords: ["architecture", "MVVM", "dependency injection", "coordinator pattern", "ObservableObject", "privacy-first design"]
 ---
 
 # DuckDuckGo Browser Architecture Guidelines

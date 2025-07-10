@@ -1,7 +1,7 @@
 ---
-description: Feature flag patterns and type-safe flag management for DuckDuckGo browser
-globs:
-  - "**/*.swift"
+title: "Feature Flag Patterns"
+description: "Feature flag patterns and type-safe flag management for DuckDuckGo browser including A/B testing and remote configuration"
+keywords: ["feature flags", "A/B testing", "type-safe", "FeatureFlagger", "remote configuration", "experiments", "SwiftUI"]
 alwaysApply: false
 ---
 
@@ -374,4 +374,4 @@ struct FeatureFlagRow<Flag: FeatureFlag>: View where Flag: CaseIterable {
 #endif
 ```
 
-See `analytics-patterns.mdc` for pixel firing patterns and `configuration-management.mdc` for advanced configuration management.
+See `analytics-patterns.md` for pixel firing patterns and `configuration-management.md` for advanced configuration management.

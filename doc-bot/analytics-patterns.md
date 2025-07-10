@@ -1,7 +1,7 @@
 ---
-description: Pixel analytics and event tracking patterns for DuckDuckGo browser
-globs:
-  - "**/*.swift"
+title: "Analytics and Pixel Patterns"
+description: "Pixel analytics and event tracking patterns for DuckDuckGo browser with privacy-safe tracking and structured events"
+keywords: ["analytics", "pixels", "event tracking", "PixelEvent", "PixelParameters", "performance metrics", "error tracking", "privacy"]
 alwaysApply: false
 ---
 
@@ -156,4 +156,4 @@ final class PrivacyAnalytics {
 }
 ```
 
-See `feature-flags.mdc` for A/B test analytics and `privacy-security.mdc` for privacy requirements.
+See `feature-flags.md` for A/B test analytics and `privacy-security.md` for privacy requirements.

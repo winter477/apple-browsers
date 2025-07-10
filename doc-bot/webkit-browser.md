@@ -1,11 +1,8 @@
 ---
-description: WebKit and browser-specific development guidelines
-globs:
-  - "**/WebView*.swift"
-  - "**/Tab*.swift"
-  - "**/Browser*.swift"
-  - "**/UserScript*.swift"
 alwaysApply: false
+title: "WebKit & Browser Development Guidelines"
+description: "WebKit and browser-specific development guidelines including WebView configuration, tab management, and JavaScript bridge patterns"
+keywords: ["WebKit", "WKWebView", "browser", "tab management", "JavaScript bridge", "navigation", "downloads", "cookies", "security"]
 ---
 
 # WebKit & Browser Development Guidelines
