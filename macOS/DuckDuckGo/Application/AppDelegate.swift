@@ -892,11 +892,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 #if APPSTORE
         crashCollection.startAttachingCrashLogMessages { pixelParameters, payloads, completion in
+
             pixelParameters.forEach { parameters in
                 var params = parameters
                 params[PixelKit.Parameters.appVersion] = CrashCollection.removeBuildNumber(from: params[PixelKit.Parameters.appVersion])
-                PixelKit.fire(GeneralPixel.crash, withAdditionalParameters: params, includeAppVersionParameter: false)
-                PixelKit.fire(GeneralPixel.crashDaily, frequency: .legacyDailyNoSuffix, withAdditionalParameters: params, includeAppVersionParameter: false)
+                let appIdentifier = CrashPixelAppIdentifier(params.removeValue(forKey: "bundle"))
+                PixelKit.fire(
+                    GeneralPixel.crash(appIdentifier: appIdentifier),
+                    frequency: .dailyAndStandard,
+                    withAdditionalParameters: params,
+                    includeAppVersionParameter: false
+                )
             }
 
             guard let lastPayload = payloads.last else {
