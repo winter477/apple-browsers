@@ -367,7 +367,8 @@ class MainViewController: UIViewController {
                                                               aiChatSettings: aiChatSettings,
                                                               voiceSearchHelper: voiceSearchHelper,
                                                               featureFlagger: featureFlagger,
-                                                              suggestionTrayDependencies: suggestionTrayDependencies)
+                                                              suggestionTrayDependencies: suggestionTrayDependencies,
+                                                              appSettings: appSettings)
 
         viewCoordinator.moveAddressBarToPosition(appSettings.currentAddressBarPosition)
 
@@ -458,7 +459,8 @@ class MainViewController: UIViewController {
         let omnibarDependencies = OmnibarDependencies(voiceSearchHelper: voiceSearchHelper,
                                                       featureFlagger: featureFlagger,
                                                       aiChatSettings: aiChatSettings,
-                                                      themingProperties: themeManager.properties)
+                                                      themingProperties: themeManager.properties,
+                                                      appSettings: appSettings)
 
         swipeTabsCoordinator = SwipeTabsCoordinator(coordinator: viewCoordinator,
                                                     tabPreviewsSource: previewsSource,
@@ -812,11 +814,25 @@ class MainViewController: UIViewController {
             if let currentTab {
                 let inset = intersection.height > 0 ? omniBarHeight : 0
                 currentTab.webView.scrollView.contentInset = .init(top: 0, left: 0, bottom: inset, right: 0)
+
+                let bottomOffset = intersection.height > 0 ? containerHeight - omniBarHeight : 0
+                currentTab.borderView.bottomOffset = -bottomOffset
+            }
+
+            // This NTP stuff is to animate the bottom border divider, but also allow the logo to show.
+            //  If we hever have the bottom border and the logo visible at the same... we'll need to do something else.
+            if let ntp = self.newTabPageViewController, !ntp.isShowingLogo {
+                self.newTabPageViewController?.additionalSafeAreaInsets.bottom = max(omniBarHeight, containerHeight)
             }
 
             UIView.animate(withDuration: duration, delay: 0, options: animationCurve) {
                 self.viewCoordinator.navigationBarContainer.superview?.layoutIfNeeded()
-                self.newTabPageViewController?.additionalSafeAreaInsets = .init(top: 0, left: 0, bottom: max(omniBarHeight, containerHeight), right: 0)
+                if let ntp = self.newTabPageViewController, ntp.isShowingLogo {
+                    self.newTabPageViewController?.additionalSafeAreaInsets.bottom = max(omniBarHeight, containerHeight)
+                } else {
+                    self.newTabPageViewController?.viewSafeAreaInsetsDidChange()
+                }
+                self.currentTab?.borderView.layoutIfNeeded()
             }
         }
 
@@ -987,7 +1003,8 @@ class MainViewController: UIViewController {
                                                   newTabDialogFactory: newTabDaxDialogFactory,
                                                   newTabDialogTypeProvider: DaxDialogs.shared,
                                                   faviconLoader: faviconLoader,
-                                                  messageNavigationDelegate: self)
+                                                  messageNavigationDelegate: self,
+                                                  appSettings: appSettings)
 
         controller.delegate = self
         controller.shortcutsDelegate = self
@@ -1407,6 +1424,8 @@ class MainViewController: UIViewController {
             if !self.isExperimentalAppearanceEnabled {
                 self.refreshMenuButtonState()
             }
+
+            self.newTabPageViewController?.widthChanged()
         }
     }
 
@@ -1436,7 +1455,8 @@ class MainViewController: UIViewController {
         if AppWidthObserver.shared.isLargeWidth {
             self.suggestionTrayController?.float(withWidth: self.viewCoordinator.omniBar.barView.searchContainerWidth + 32, useActiveShadow: isExperimentalAppearanceEnabled)
         } else {
-            self.suggestionTrayController?.fill()
+            let bottomOmniBarHeight = appSettings.currentAddressBarPosition.isBottom ? omniBar.barView.expectedHeight : 0
+            self.suggestionTrayController?.fill(bottomOffset: bottomOmniBarHeight)
         }
     }
     
@@ -2295,6 +2315,10 @@ extension MainViewController: BrowserChromeDelegate {
 
 // MARK: - OmniBarDelegate Methods
 extension MainViewController: OmniBarDelegate {
+    func isSuggestionTrayVisible() -> Bool {
+        suggestionTrayController?.isShowing == true
+    }
+
     func onSelectFavorite(_ favorite: BookmarkEntity) {
         handleFavoriteSelected(favorite)
     }
@@ -3539,19 +3563,6 @@ extension MainViewController: AIChatViewControllerManagerDelegate {
             }
         } else {
             segueToSettingsAIChat()
-        }
-    }
-}
-
-extension MainViewController {
-    private func updateOmniBarSeparatorForDuckPlayer(addressBarPosition: AddressBarPosition, isDuckPlayerVisible: Bool) {
-        if isDuckPlayerVisible {
-            switch addressBarPosition {
-            case .top, .bottom:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.viewCoordinator.omniBar.hideSeparator()
-                }
-            }
         }
     }
 }
