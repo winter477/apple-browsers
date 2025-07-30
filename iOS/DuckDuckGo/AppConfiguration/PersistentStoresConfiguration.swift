@@ -46,7 +46,8 @@ final class PersistentStoresConfiguration {
             try FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true, attributes: nil)
             Logger.general.info("📁 Recreated temp directory at: \(tmp.path)")
         } catch {
-            Logger.general.error("❌ Failed to reset tmp dir: \(error.localizedDescription)")        }
+            Logger.general.error("❌ Failed to reset tmp dir: \(error.localizedDescription)")
+        }
     }
 
     private func loadDatabase() throws {
