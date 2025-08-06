@@ -102,10 +102,8 @@ public enum FeatureFlag: String {
     case june2025TabManagerLayoutChanges
 
     /// https://app.asana.com/1/137249556945/project/72649045549333/task/1210055762484807?focus=true
-    case experimentalAIChat
-
     /// https://app.asana.com/1/137249556945/task/1210496258241813
-    case experimentalSwitcherBarTransition
+    case experimentalAddressBar
 
     /// https://app.asana.com/1/137249556945/task/1210139454006070
     case privacyProOnboardingPromotion
@@ -197,7 +195,6 @@ extension FeatureFlag: FeatureFlagDescribing {
              .paidAIChat,
              .canInterceptSyncSetupUrls,
              .exchangeKeysToSyncWithAnotherDevice,
-             .experimentalSwitcherBarTransition,
              .subscriptionRebranding,
              .june2025TabManagerLayoutChanges,
              .canPromoteImportPasswordsInPasswordManagement,
@@ -312,10 +309,8 @@ extension FeatureFlag: FeatureFlagDescribing {
             return .remoteReleasable(.subfeature(iOSBrowserConfigSubfeature.intentionallyLocalOnlySubfeatureForTests))
         case .june2025TabManagerLayoutChanges:
             return .remoteReleasable(.subfeature(iOSBrowserConfigSubfeature.june2025TabManagerLayoutChanges))
-        case .experimentalAIChat:
-            return .internalOnly()
-        case .experimentalSwitcherBarTransition:
-            return .internalOnly()
+        case .experimentalAddressBar:
+            return .remoteReleasable(.subfeature(AIChatSubfeature.experimentalAddressBar))
         case .privacyProOnboardingPromotion:
             return .remoteReleasable(.subfeature(PrivacyProSubfeature.privacyProOnboardingPromotion))
         case .syncSetupBarcodeIsUrlBased:
