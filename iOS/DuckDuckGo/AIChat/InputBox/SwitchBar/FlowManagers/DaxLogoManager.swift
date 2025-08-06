@@ -29,8 +29,8 @@ final class DaxLogoManager {
 
     private var logoContainerView: UIView = UIView()
 
-    private var homeDaxLogoView: UIView = DaxLogoView(isAIDax: false)
-    private var aiDaxLogoView: UIView = DaxLogoView(isAIDax: true)
+    private var homeDaxLogoView = DaxLogoView(isAIDax: false)
+    private var aiDaxLogoView = DaxLogoView(isAIDax: true)
 
     private var isHomeDaxVisible: Bool = false
     private var isAIDaxVisible: Bool = false
@@ -106,11 +106,13 @@ final class DaxLogoManager {
         let aiLogoProgress = progress
 
         if isHomeDaxVisible == isAIDaxVisible {
-            homeDaxLogoView.alpha = isAIDaxVisible ? 1.0 : 0.0
+            homeDaxLogoView.alpha = isHomeDaxVisible ? 1.0 : 0.0
+            homeDaxLogoView.textImage.alpha = isHomeDaxVisible ? homeLogoProgress : 0
             aiDaxLogoView.alpha = isAIDaxVisible ? aiLogoProgress : 0
         } else {
             // Fade out home only when one logo is visible - prevents flashing
             homeDaxLogoView.alpha = isHomeDaxVisible ? Easing.inOutCirc(homeLogoProgress) : 0
+            homeDaxLogoView.textImage.alpha = 1.0
             aiDaxLogoView.alpha = isAIDaxVisible ? Easing.inOutCirc(aiLogoProgress) : 0
         }
     }
@@ -118,7 +120,7 @@ final class DaxLogoManager {
 
 private final class DaxLogoView: UIView {
     private(set) lazy var logoImage = UIImageView(image: UIImage(resource: isAIDax ? .duckAI : .searchDax))
-    let textImage = UIImageView(image: UIImage(resource: .textDuckDuckGo))
+    private(set) lazy var textImage = UIImageView(image: UIImage(resource: isAIDax ? .textDuckAi : .textDuckDuckGo))
 
     private let stackView = UIStackView()
     private let isAIDax: Bool
