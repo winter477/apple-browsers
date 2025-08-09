@@ -264,13 +264,20 @@ public extension SubJobWebRunning {
     }
 
     func conditionSuccess(actions: [Action]) async {
-        Logger.action.log("Condition action met its expectation, pushing new actions: \(actions, privacy: .public)")
+        if actions.isEmpty {
+            Logger.action.log("Condition action completed with no follow-up actions")
+            if actionsHandler?.stepType == .optOut {
+                stageCalculator.fireOptOutConditionNotFound()
+            }
+        } else {
+            Logger.action.log("Condition action met its expectation, with follow-up actions: \(actions)")
+            if actionsHandler?.stepType == .optOut {
+                stageCalculator.fireOptOutConditionFound()
+            }
 
-        if actionsHandler?.stepType == .optOut {
-            stageCalculator.fireOptOutConditionFound()
+            actionsHandler?.insert(actions: actions)
         }
 
-        actionsHandler?.insert(actions: actions)
         await self.executeNextStep()
     }
 
