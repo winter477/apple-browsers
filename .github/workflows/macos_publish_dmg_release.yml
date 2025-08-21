@@ -78,6 +78,10 @@ jobs:
     name: Stop workflow if needed
 
     needs: [tag-public-release]
+
+    # always run to produce the output needed by publish-to-sparkle
+    if: always()
+
     outputs:
       stop_workflow: ${{ steps.download-stop-workflow.outcome == 'success' }}
 
