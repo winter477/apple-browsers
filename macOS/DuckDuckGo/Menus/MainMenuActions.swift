@@ -59,7 +59,7 @@ extension AppDelegate {
 
     @objc func newWindow(_ sender: Any?) {
         DispatchQueue.main.async {
-            WindowsManager.openNewWindow()
+            WindowsManager.openNewWindow(burnerMode: .regular)
         }
     }
 

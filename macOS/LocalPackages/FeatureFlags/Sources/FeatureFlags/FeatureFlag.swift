@@ -153,9 +153,11 @@ public enum FeatureFlag: String, CaseIterable {
     /// Note: 'Failsafe' feature flag. See https://app.asana.com/1/137249556945/project/1202500774821704/task/1210572145398078?focus=true
     case supportsAlternateStripePaymentFlow
 
+    /// https://app.asana.com/1/137249556945/project/1204006570077678/task/1211048158968532?focus=true
+    case openFireWindowByDefault
+
     /// https://app.asana.com/1/137249556945/project/72649045549333/task/1208994157946492?focus=true
     case restoreSessionPrompt
-
 }
 
 extension FeatureFlag: FeatureFlagDescribing {
@@ -226,6 +228,7 @@ extension FeatureFlag: FeatureFlagDescribing {
                 .newFeedbackForm,
                 .vpnToolbarUpsell,
                 .supportsAlternateStripePaymentFlow,
+                .openFireWindowByDefault,
                 .restoreSessionPrompt:
             return true
         case .debugMenu,
@@ -345,6 +348,8 @@ extension FeatureFlag: FeatureFlagDescribing {
             return .internalOnly()
         case .supportsAlternateStripePaymentFlow:
             return .remoteReleasable(.subfeature(PrivacyProSubfeature.supportsAlternateStripePaymentFlow))
+        case .openFireWindowByDefault:
+            return .internalOnly()
         case .restoreSessionPrompt:
             return .disabled
         }

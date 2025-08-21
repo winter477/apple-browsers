@@ -901,6 +901,8 @@ struct UserText {
     static let onStartup = NSLocalizedString("preferences.on-startup", value: "On Startup", comment: "Name of the preferences section related to app startup")
     static let reopenAllWindowsFromLastSession = NSLocalizedString("preferences.reopen-windows", value: "Reopen all windows from last session", comment: "Option to control session restoration")
     static let showHomePage = NSLocalizedString("preferences.show-home", value: "Open a new window", comment: "Option to control session startup")
+    static let fireWindow = NSLocalizedString("preferences.fire-window-section", value: "Fire Window", comment: "Section title for Fire Window preferences")
+    static let openFireWindowByDefault = NSLocalizedString("preferences.open-fire-window-by-default", value: "Open Fire Window by default", comment: "Option to make all new windows Fire Windows")
 
     static let pinnedTabs = NSLocalizedString("preferences-pinned-tabs.title", value: "Pinned tabs are", comment: "Beginning of the setting for pinned tabs. It's either 'Pinned tabs are shared across all windows' or 'Pinned tabs are different in each window'")
     static let pinnedTabsWarningTitle = NSLocalizedString("preferences-pinned-tabs-warning-title", value: "Are you sure you want to share pinned tabs across all windows?", comment: "Title of warning before switching from per window pinned tabs to shared pinned tabs")

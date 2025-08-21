@@ -67117,6 +67117,18 @@
         }
       }
     },
+    "preferences.fire-window-section" : {
+      "comment" : "Section title for Fire Window preferences",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fire Window"
+          }
+        }
+      }
+    },
     "preferences.general" : {
       "comment" : "Title of the option to show the General preferences",
       "extractionState" : "extracted_with_value",
@@ -67473,6 +67485,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "При запуске"
+          }
+        }
+      }
+    },
+    "preferences.open-fire-window-by-default" : {
+      "comment" : "Option to make all new windows Fire Windows",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Fire Window by default"
           }
         }
       }
