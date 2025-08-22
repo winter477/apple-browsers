@@ -267,11 +267,12 @@ class OmniBarViewController: UIViewController, OmniBar {
         textDidChange()
     }
 
-    func beginEditing() {
+    func beginEditing(animated: Bool) {
         textFieldTapped = false
         defer {
             textFieldTapped = true
         }
+
         textField.becomeFirstResponder()
     }
 

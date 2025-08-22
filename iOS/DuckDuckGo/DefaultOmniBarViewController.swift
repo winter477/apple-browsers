@@ -35,7 +35,7 @@ final class DefaultOmniBarViewController: OmniBarViewController {
     private weak var editingStateViewController: OmniBarEditingStateViewController?
     private var cancellables = Set<AnyCancellable>()
 
-//    let editModeTransitioningDelegate = OmniBarEditingStateTransitioningDelegate()
+    private var animateNextEditingTransition = true
 
     override func loadView() {
         view = omniBarView
@@ -58,12 +58,14 @@ final class DefaultOmniBarViewController: OmniBarViewController {
         updateShadowAppearanceByApplyingLayerMask()
     }
 
+    
     override func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if aiChatSettings.isAIChatSearchInputUserSettingsEnabled {
             if textFieldTapped {
                 omniDelegate?.onExperimentalAddressBarTapped()
             }
-            presentExperimentalEditingState(for: textField)
+            presentExperimentalEditingState(for: textField, animated: animateNextEditingTransition)
+
             return false
         }
 
@@ -149,6 +151,14 @@ final class DefaultOmniBarViewController: OmniBarViewController {
         omniBarView.isUsingSmallTopSpacing = false
     }
 
+    override func beginEditing(animated: Bool) {
+        animateNextEditingTransition = animated
+
+        super.beginEditing(animated: animated)
+        
+        animateNextEditingTransition = true
+    }
+
     override func endEditing() {
         super.endEditing()
         editingStateViewController?.dismissAnimated()
@@ -172,7 +182,7 @@ final class DefaultOmniBarViewController: OmniBarViewController {
                                     clip: shouldClipShadows)
     }
 
-    private func presentExperimentalEditingState(for textField: UITextField) {
+    private func presentExperimentalEditingState(for textField: UITextField, animated: Bool = true) {
         guard editingStateViewController == nil else { return }
         guard let suggestionsDependencies = dependencies.suggestionTrayDependencies else { return }
 
@@ -197,7 +207,7 @@ final class DefaultOmniBarViewController: OmniBarViewController {
         
         self.editingStateViewController = editingStateViewController
 
-        present(editingStateViewController, animated: true)
+        present(editingStateViewController, animated: animated)
     }
 
     private func createSwitchBarHandler(for textField: UITextField) -> SwitchBarHandler {
