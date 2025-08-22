@@ -92,7 +92,6 @@ class MainViewController: UIViewController {
     var suggestionTrayController: SuggestionTrayViewController?
 
     let homePageConfiguration: HomePageConfiguration
-    let homeTabManager: NewTabPageManager
     let tabManager: TabManager
     let previewsSource: TabPreviewsSource
     let appSettings: AppSettings
@@ -110,7 +109,6 @@ class MainViewController: UIViewController {
     let syncService: DDGSyncing
     let syncDataProviders: SyncDataProviders
     let syncPausedStateManager: any SyncPausedStateManaging
-    private let variantManager: VariantManager
     private let tutorialSettings: TutorialSettings
     private let contextualOnboardingLogic: ContextualOnboardingLogic
     let contextualOnboardingPixelReporter: OnboardingPixelReporting
@@ -243,7 +241,6 @@ class MainViewController: UIViewController {
         tabManager: TabManager,
         syncPausedStateManager: any SyncPausedStateManaging,
         privacyProDataReporter: PrivacyProDataReporting,
-        variantManager: VariantManager,
         contextualOnboardingLogic: ContextualOnboardingLogic,
         contextualOnboardingPixelReporter: OnboardingPixelReporting,
         tutorialSettings: TutorialSettings = DefaultTutorialSettings(),
@@ -283,8 +280,6 @@ class MainViewController: UIViewController {
         self.themeManager = themeManager
         self.syncPausedStateManager = syncPausedStateManager
         self.privacyProDataReporter = privacyProDataReporter
-        self.homeTabManager = NewTabPageManager()
-        self.variantManager = variantManager
         self.tutorialSettings = tutorialSettings
         self.contextualOnboardingLogic = contextualOnboardingLogic
         self.contextualOnboardingPixelReporter = contextualOnboardingPixelReporter
@@ -342,7 +337,6 @@ class MainViewController: UIViewController {
         let newTabPageDependencies = SuggestionTrayViewController.NewTabPageDependencies(favoritesModel: favoritesViewModel,
                                                                                          homePageMessagesConfiguration: homePageConfiguration,
                                                                                          privacyProDataReporting: privacyProDataReporter,
-                                                                                         variantManager: variantManager,
                                                                                          newTabDialogFactory: newTabDaxDialogFactory,
                                                                                          newTabDaxDialogManager: daxDialogsManager,
                                                                                          faviconLoader: faviconLoader,
@@ -981,11 +975,9 @@ class MainViewController: UIViewController {
 
         let newTabDaxDialogFactory = NewTabDaxDialogFactory(delegate: self, daxDialogsFlowCoordinator: daxDialogsManager, onboardingPixelReporter: contextualOnboardingPixelReporter)
         let controller = NewTabPageViewController(tab: tabModel,
-                                                  isNewTabPageCustomizationEnabled: homeTabManager.isNewTabPageSectionsEnabled,
                                                   interactionModel: favoritesViewModel,
                                                   homePageMessagesConfiguration: homePageConfiguration,
                                                   privacyProDataReporting: privacyProDataReporter,
-                                                  variantManager: variantManager,
                                                   newTabDialogFactory: newTabDaxDialogFactory,
                                                   daxDialogsManager: daxDialogsManager,
                                                   faviconLoader: faviconLoader,
@@ -993,7 +985,6 @@ class MainViewController: UIViewController {
                                                   appSettings: appSettings)
 
         controller.delegate = self
-        controller.shortcutsDelegate = self
         controller.chromeDelegate = self
 
         newTabPageViewController = controller
@@ -1427,7 +1418,7 @@ class MainViewController: UIViewController {
     }
 
     func refreshMenuButtonState() {
-        if !homeTabManager.isNewTabPageSectionsEnabled && newTabPageViewController != nil {
+        if newTabPageViewController != nil {
             viewCoordinator.omniBar.barView.menuButton.accessibilityLabel = UserText.bookmarksButtonHint
             viewCoordinator.updateToolbarWithState(.newTab)
             presentedMenuButton.setState(.menuImage, animated: false)
@@ -2776,32 +2767,6 @@ extension MainViewController: NewTabPageControllerDelegate {
 
     func newTabPageDidRequestFaviconsFetcherOnboarding(_ controller: NewTabPageViewController) {
         faviconsFetcherOnboarding.presentOnboardingIfNeeded(from: self)
-    }
-}
-
-extension MainViewController: NewTabPageControllerShortcutsDelegate {
-    func newTabPageDidRequestDownloads(_ controller: NewTabPageViewController) {
-        segueToDownloads()
-    }
-    
-    func newTabPageDidRequestBookmarks(_ controller: NewTabPageViewController) {
-        segueToBookmarks()
-    }
-    
-    func newTabPageDidRequestPasswords(_ controller: NewTabPageViewController) {
-        launchAutofillLogins(source: .newTabPageShortcut)
-    }
-    
-    func newTabPageDidRequestAIChat(_ controller: NewTabPageViewController) {
-        loadUrl(Constant.duckAIURL)
-    }
-    
-    func newTabPageDidRequestSettings(_ controller: NewTabPageViewController) {
-        segueToSettings()
-    }
-
-    private enum Constant {
-        static let duckAIURL = URL(string: "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1")!
     }
 }
 
