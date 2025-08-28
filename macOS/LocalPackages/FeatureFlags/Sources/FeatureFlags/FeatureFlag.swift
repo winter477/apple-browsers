@@ -84,6 +84,9 @@ public enum FeatureFlag: String, CaseIterable {
     /// https://app.asana.com/1/137249556945/project/72649045549333/task/1205508328452434?focus=true
     case dbpRemoteBrokerDelivery
 
+    /// https://app.asana.com/1/137249556945/project/481882893211075/task/1210764611054383?focus=true
+    case dbpEmailConfirmationDecoupling
+
     /// https://app.asana.com/1/137249556945/project/72649045549333/task/1210081345713964?focus=true
     case syncSetupBarcodeIsUrlBased
 
@@ -233,7 +236,8 @@ extension FeatureFlag: FeatureFlagDescribing {
                 .supportsAlternateStripePaymentFlow,
                 .openFireWindowByDefault,
                 .restoreSessionPrompt,
-                .duckAISearchParameter:
+                .duckAISearchParameter,
+                .dbpEmailConfirmationDecoupling:
             return true
         case .debugMenu,
                 .sslCertificatesBypass,
@@ -306,6 +310,8 @@ extension FeatureFlag: FeatureFlagDescribing {
             return .remoteReleasable(.feature(.delayedWebviewPresentation))
         case .dbpRemoteBrokerDelivery:
             return .remoteReleasable(.subfeature(DBPSubfeature.remoteBrokerDelivery))
+        case .dbpEmailConfirmationDecoupling:
+            return .remoteReleasable(.subfeature(DBPSubfeature.emailConfirmationDecoupling))
         case .syncSetupBarcodeIsUrlBased:
             return .remoteReleasable(.subfeature(SyncSubfeature.syncSetupBarcodeIsUrlBased))
         case .exchangeKeysToSyncWithAnotherDevice:
