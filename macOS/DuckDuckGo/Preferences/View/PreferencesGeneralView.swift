@@ -100,9 +100,28 @@ extension Preferences {
 
                     PreferencePaneSubSection {
                         Picker(selection: $startupModel.restorePreviousSession, content: {
-                            Text(UserText.showHomePage).tag(false)
+                            if featureFlagger.isFeatureOn(.openFireWindowByDefault) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack(spacing: 0) {
+                                        Text(UserText.openANew)
+                                        Picker("", selection: $startupModel.startupWindowType) {
+                                            ForEach(StartupWindowType.allCases, id: \.self) { windowType in
+                                                Text(windowType.displayName).tag(windowType)
+                                            }
+                                        }
+                                        .pickerStyle(.menu)
+                                        .fixedSize()
+                                        .disabled(startupModel.restorePreviousSession)
+                                    }
+                                }
+                                .tag(false)
                                 .padding(.bottom, 4)
                                 .accessibilityIdentifier("PreferencesGeneralView.stateRestorePicker.openANewWindow")
+                            } else {
+                                Text(UserText.showHomePage).tag(false)
+                                    .padding(.bottom, 4)
+                                    .accessibilityIdentifier("PreferencesGeneralView.stateRestorePicker.openANewWindow")
+                            }
                             Text(UserText.reopenAllWindowsFromLastSession).tag(true)
                                 .accessibilityIdentifier("PreferencesGeneralView.stateRestorePicker.reopenAllWindowsFromLastSession")
                         }, label: {})
@@ -110,7 +129,7 @@ extension Preferences {
                         .offset(x: PreferencesUI_macOS.Const.pickerHorizontalOffset)
                         .accessibilityIdentifier("PreferencesGeneralView.stateRestorePicker")
 
-                        if dataClearingModel.isAutoClearEnabled && startupModel.restorePreviousSession {
+                        if (dataClearingModel.isAutoClearEnabled || dataClearingModel.shouldOpenFireWindowbyDefault) && startupModel.restorePreviousSession {
                             VStack(alignment: .leading, spacing: 1) {
                                 TextMenuItemCaption(UserText.disableAutoClearToEnableSessionRestore)
                                 TextButton(UserText.showDataClearingSettings) {
