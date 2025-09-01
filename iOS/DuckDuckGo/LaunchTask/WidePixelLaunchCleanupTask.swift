@@ -1,5 +1,6 @@
 //
-//  WidePixelEvents.swift
+//  WidePixelLaunchCleanupTask.swift
+//  DuckDuckGo
 //
 //  Copyright © 2025 DuckDuckGo. All rights reserved.
 //
@@ -18,10 +19,16 @@
 
 import Foundation
 
-public enum WidePixelEvent {
-    case saveFailed(pixelName: String, error: Error)
-    case updateFailed(pixelName: String, error: Error)
-    case loadFailed(pixelName: String, error: Error)
-    case completeFailed(pixelName: String, error: Error)
-    case discardFailed(pixelName: String, error: Error)
+struct WidePixelLaunchCleanupTask: LaunchTask {
+
+    let widePixelService: WidePixelService
+
+    var name: String = "Wide Pixel Launch Cleanup"
+
+    func run(context: LaunchTaskContext) {
+        widePixelService.sendAbandonedPixels {
+            context.finish()
+        }
+    }
+
 }

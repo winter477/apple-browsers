@@ -164,6 +164,9 @@ public enum FeatureFlag: String, CaseIterable {
 
     /// https://app.asana.com/1/137249556945/project/1204167627774280/task/1211122605729911?focus=true
     case duckAISearchParameter
+
+    /// https://app.asana.com/1/137249556945/project/414235014887631/task/1211127159784126?focus=true
+    case subscriptionPurchaseWidePixelMeasurement
 }
 
 extension FeatureFlag: FeatureFlagDescribing {
@@ -176,7 +179,8 @@ extension FeatureFlag: FeatureFlagDescribing {
                 .importChromeShortcuts,
                 .updateSafariBookmarksImport,
                 .updateFirefoxBookmarksImport,
-                .supportsAlternateStripePaymentFlow:
+                .supportsAlternateStripePaymentFlow,
+                .subscriptionPurchaseWidePixelMeasurement:
             true
         default:
             false
@@ -237,7 +241,8 @@ extension FeatureFlag: FeatureFlagDescribing {
                 .openFireWindowByDefault,
                 .restoreSessionPrompt,
                 .duckAISearchParameter,
-                .dbpEmailConfirmationDecoupling:
+                .dbpEmailConfirmationDecoupling,
+                .subscriptionPurchaseWidePixelMeasurement:
             return true
         case .debugMenu,
                 .sslCertificatesBypass,
@@ -364,6 +369,8 @@ extension FeatureFlag: FeatureFlagDescribing {
             return .disabled
         case .duckAISearchParameter:
             return .enabled
+        case .subscriptionPurchaseWidePixelMeasurement:
+            return .remoteReleasable(.subfeature(PrivacyProSubfeature.subscriptionPurchaseWidePixelMeasurement))
         }
     }
 }
