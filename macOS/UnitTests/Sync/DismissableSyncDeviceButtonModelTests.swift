@@ -293,11 +293,12 @@ final class DismissableSyncDeviceButtonModelTests: XCTestCase {
 
     // MARK: - Helper Methods
 
-    private func createModel(source: DismissableSyncDeviceButtonModel.SyncDevicePromoSource) -> DismissableSyncDeviceButtonModel {
+    private func createModel(source: DismissableSyncDeviceButtonModel.DismissableSyncDevicePromoSource) -> DismissableSyncDeviceButtonModel {
         return DismissableSyncDeviceButtonModel(
             source: source,
             keyValueStore: mockKeyValueStore,
             authStatePublisher: authStateSubject.eraseToAnyPublisher(),
+            initialAuthState: .initializing,
             syncLauncher: mockSyncLauncher,
             featureFlagger: mockFeatureFlagger
         )
@@ -323,7 +324,7 @@ final class DismissableSyncDeviceButtonModelTests: XCTestCase {
 private class MockSyncDeviceFlowLauncher: SyncDeviceFlowLaunching {
     var startDeviceSyncFlowCalled = false
 
-    func startDeviceSyncFlow(completion: (() -> Void)?) {
+    func startDeviceSyncFlow(source: SyncDeviceButtonTouchpoint, completion: (() -> Void)?) {
         startDeviceSyncFlowCalled = true
         completion?()
     }
