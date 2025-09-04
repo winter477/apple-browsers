@@ -248,6 +248,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }()
 
+    let webExtensionManager: WebExtensionManaging?
+
     private var didFinishLaunching = false
 
 #if SPARKLE
@@ -798,13 +800,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 #endif
         PixelKit.configureExperimentKit(featureFlagger: featureFlagger, eventTracker: ExperimentEventTracker(store: UserDefaults.appConfiguration))
 
-#if !APPSTORE && WEB_EXTENSIONS_ENABLED
-        if #available(macOS 15.4, *) {
-            Task { @MainActor in
-                await WebExtensionManager.shared.loadInstalledExtensions()
+        if #available(macOS 15.4, *), featureFlagger.isFeatureOn(.webExtensions) {
+            let webExtensionManager = WebExtensionManager()
+            self.webExtensionManager = webExtensionManager
+
+            Task {
+                await webExtensionManager.loadInstalledExtensions()
             }
+        } else {
+            self.webExtensionManager = nil
         }
-#endif
 
 #if !APPSTORE
         crashReporter = CrashReporter(internalUserDecider: internalUserDecider)
